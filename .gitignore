@@ -1,0 +1,6 @@
+*/
+terraform.tfstate
+terraform.tfstate.backup
+.terraform
+.DS_Store
+setup.tf*
