@@ -25,10 +25,10 @@ module "aviatrix_controller_initialize" {
   arm_application_id            = module.aviatrix_controller_arm.application_id
   arm_application_key           = module.aviatrix_controller_arm.application_key
   directory_id                  = module.aviatrix_controller_arm.directory_id
-  account_email                 = "<< your email address for your access account>>"
-  access_account_name           = "<< your account name mapping to your Azure account>>"
-  aviatrix_customer_id          = "<< your customer license id>>"
-  terraform_module_path         = "<< absolute path of this terraform module>>"
+  account_email                 = "<< your email address for your access account >>"
+  access_account_name           = "<< your account name mapping to your Azure account >>"
+  aviatrix_customer_id          = "<< your customer license id >>"
+  terraform_module_path         = "<< absolute path of this terraform module >>"
   depends_on                    = [module.aviatrix_controller_arm]
 }
 
