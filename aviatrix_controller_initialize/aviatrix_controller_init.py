@@ -15,7 +15,7 @@ directory_tenant_id = sys.argv[8]
 account_email = sys.argv[9]
 access_account_name = sys.argv[10]
 aviatrix_customer_id = sys.argv[11]
-# Tht wait time from experience is between 60 to 600 seconds
+# The wait time from experience is between 60 to 600 seconds
 default_wait_time_for_apache_wakeup = 300
 
 class AviatrixException(Exception):
@@ -232,7 +232,8 @@ def wait_until_controller_api_server_is_ready(
     api_endpoint_url = "https://" + ucc_public_ip + "/" + api_version + "/" + api_route
 
     #invoke the aviatrix api with a non-existed api
-    #to resolve the issue where server status code is 200 but response message is "Valid action required: login", which means backend is not ready yet
+    #to resolve the issue where server status code is 200 but response message is "Valid action required: login"
+    #which means backend is not ready yet
     payload = {
         "action": "login",
         "username": "test",
@@ -279,7 +280,6 @@ def wait_until_controller_api_server_is_ready(
                 if response.status_code == 200:
                     is_apache_returned_200 = True
 
-                # Case 02: cloudxd is     ready if response returns False (expected) and reason message is "username and password do not match"
                 response_message = py_dict['reason']
                 response_msg_indicates_backend_not_ready = "Valid action required"
                 # case1:
