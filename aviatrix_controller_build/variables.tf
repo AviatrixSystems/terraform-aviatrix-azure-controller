@@ -7,5 +7,4 @@ variable "location" {
 variable "controller_name" {
   type        = string
   description = "Customized Name for Aviatrix Controller"
-  default     = "aviatrix-controller"
 }

@@ -1,6 +1,11 @@
-*/
+.terraform
 terraform.tfstate
 terraform.tfstate.backup
-.terraform
 .DS_Store
-setup.tf*
+setup.tf
+.idea/
+bin
+include
+lib
+venv
+

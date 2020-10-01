@@ -1,15 +1,15 @@
-output "Application_Client_ID" {
+output "application_id" {
   value = azuread_application.aviatrix_ad_app.application_id
 }
 
-output "Application_Key_Client_Secret" {
+output "application_key" {
   value = azuread_application_password.aviatrix_app_password.value
 }
 
-output "Subscription_ID" {
+output "subscription_id" {
   value = data.azurerm_subscription.main.subscription_id
 }
 
-output "Directory_Tenant_ID" {
+output "directory_id" {
   value = data.azurerm_subscription.main.tenant_id
 }

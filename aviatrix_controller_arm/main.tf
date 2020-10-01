@@ -1,3 +1,11 @@
+// accept license of Aviatrix Controller
+resource "null_resource" "accept_license" {
+  provisioner "local-exec" {
+    command = "python3 ${var.terraform_module_path}/aviatrix_controller_arm/accept_license.py"
+  }
+}
+
+
 # 1.Create the Azure AD APP
 resource "azuread_application" "aviatrix_ad_app" {
   name = var.app_name
@@ -7,7 +15,7 @@ resource "azuread_application" "aviatrix_ad_app" {
 // Generate a random string
 resource "random_string" "password" {
   length  = 32
-  special = true
+  special = false
 }
 resource "azuread_application_password" "aviatrix_app_password" {
   application_object_id = azuread_application.aviatrix_ad_app.id
