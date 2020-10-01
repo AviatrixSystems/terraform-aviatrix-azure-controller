@@ -17,7 +17,7 @@ This Terraform module allows you to launch the Aviatrix Controller and create th
 
 
 ## Procedures for Building and Initializing a Controller in Azure
-###1. Create the Python virtual environment and install required dependencies in the terminal
+### 1. Create the Python virtual environment and install required dependencies in the terminal
 ``` shell
  python3 -m venv venv
 ```
@@ -30,13 +30,14 @@ In order to run these `accept_license.py` and `aviatrix_controller_init.py` pyth
  pip install -r requirements.txt
 ```
 
-###2. Authenticating to Azure using the Azure CLI in the terminal
+### 2. Authenticating to Azure using the Azure CLI in the terminal
 ``` shell
 az login
 ```
 This command will open the default browser and load Azure sign in page
 
-###3. Create the Azure ARM (Service Principal)
+### 3. Create the Azure ARM (Service Principal)
+
 **create_arm.tf**
 ```
 provider "azurerm" {
@@ -65,7 +66,7 @@ output "application_key" {
   value = module.aviatrix_controller_arm.application_key
 }
 ```
-*Excute*
+*Execute*
 ```shell
 cd aviatrix_controller_arm
 terraform init
@@ -73,7 +74,8 @@ terraform apply
 cd ..
 ```
 
-###4. Build the Controller VM on Azure
+### 4. Build the Controller VM on Azure
+
 **build_controller.tf**
 ```
 provider "azurerm" {
@@ -95,14 +97,15 @@ output "avx_controller_private_ip" {
   value = module.aviatrix_controller_build.aviatrix_controller_private_ip_address
 }
 ```
-*Excute*
+*Execute*
 ```shell
 cd aviatrix_controller_build
 terraform init
 terraform apply
 cd ..
 ```
-###5. Initialize the Controller
+### 5. Initialize the Controller
+
 **controller_init.tf**
 ```
 provider "azurerm" {
@@ -122,11 +125,11 @@ module "aviatrix_controller_initialize" {
   directory_id                  = "<< directory id obtained in step 3 >>"
   account_email                 = "<< your email address for your access account >>"
   access_account_name           = "<< your account name mapping to your Azure account >>"
-  aviatrix_customer_id          = "<< your customer license id> >"
+  aviatrix_customer_id          = "<< your customer license id >>"
   terraform_module_path         = "<< absolute path of this terraform module >>"
 }
 ```
-*Excute*
+*Execute*
 ```shell
 cd aviatrix_controller_initialize
 terraform init
@@ -134,7 +137,7 @@ terraform apply
 cd ..
 ```
 
-###Putting it all together
+### Putting it all together
 The controller buildup and initialization can be done using a single terraform file.
 ```
 provider "azurerm" {
@@ -191,7 +194,7 @@ output "avx_controller_public_ip" {
   value = module.aviatrix_controller_build.aviatrix_controller_public_ip_address
 }
 ```
-*Excute*
+*Execute*
 ```shell
 terraform init
 terraform apply
