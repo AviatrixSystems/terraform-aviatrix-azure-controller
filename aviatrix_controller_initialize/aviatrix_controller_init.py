@@ -3,18 +3,6 @@ import json
 import traceback
 import requests
 import sys
-
-ucc_public_ip = sys.argv[1]
-ucc_private_ip = sys.argv[2]
-admin_email = sys.argv[3]
-new_admin_password = sys.argv[4]
-arm_subscription_id = sys.argv[5]
-arm_application_client_id = sys.argv[6]
-arm_application_client_secret = sys.argv[7]
-directory_tenant_id = sys.argv[8]
-account_email = sys.argv[9]
-access_account_name = sys.argv[10]
-aviatrix_customer_id = sys.argv[11]
 # The wait time from experience is between 60 to 600 seconds
 default_wait_time_for_apache_wakeup = 300
 
@@ -840,6 +828,18 @@ def verify_aviatrix_api_create_access_account(
 #End def verify_aviatrix_api_create_access_account()
 
 if __name__ == "__main__":
+
+    ucc_public_ip = sys.argv[1]
+    ucc_private_ip = sys.argv[2]
+    admin_email = sys.argv[3]
+    new_admin_password = sys.argv[4]
+    arm_subscription_id = sys.argv[5]
+    arm_application_client_id = sys.argv[6]
+    arm_application_client_secret = sys.argv[7]
+    directory_tenant_id = sys.argv[8]
+    account_email = sys.argv[9]
+    access_account_name = sys.argv[10]
+    aviatrix_customer_id = sys.argv[11]
 
     event = {
         "keyword_for_log": "aviatrix-azure-function---",
