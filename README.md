@@ -37,6 +37,7 @@ az login
 This command will open the default browser and load Azure sign in page
 
 ### 3. Create the Azure ARM (Service Principal)
+
 **create_arm.tf**
 ```
 provider "azurerm" {
@@ -74,6 +75,7 @@ cd ..
 ```
 
 ### 4. Build the Controller VM on Azure
+
 **build_controller.tf**
 ```
 provider "azurerm" {
@@ -103,6 +105,7 @@ terraform apply
 cd ..
 ```
 ### 5. Initialize the Controller
+
 **controller_init.tf**
 ```
 provider "azurerm" {
