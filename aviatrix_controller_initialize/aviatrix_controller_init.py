@@ -16,6 +16,7 @@ class AviatrixException(Exception):
 
 # END class MyException
 
+
 def function_handler(event):
     keyword_for_log = event["keyword_for_log"]
     ucc_public_ip = event["ucc_public_ip"]
@@ -37,10 +38,21 @@ def function_handler(event):
     # Reconstruct some parameters
     aviatrix_customer_id = aviatrix_customer_id.rstrip()
     aviatrix_customer_id = aviatrix_customer_id.lstrip()
-    api_endpoint_url = "https://" + ucc_public_ip + "/" + aviatrix_api_version + "/" + aviatrix_api_route
+    api_endpoint_url = (
+        "https://"
+        + ucc_public_ip
+        + "/"
+        + aviatrix_api_version
+        + "/"
+        + aviatrix_api_route
+    )
 
     # Step1. Wait until the rest API service of Aviatrix Controller is up and running
-    print(keyword_for_log + "START: Wait until API server of Aviatrix Controller is up and running", flush=True)
+    print(
+        keyword_for_log
+        + "START: Wait until API server of Aviatrix Controller is up and running",
+        flush=True,
+    )
 
     wait_until_controller_api_server_is_ready(
         ucc_public_ip=ucc_public_ip,
@@ -51,38 +63,61 @@ def function_handler(event):
         keyword_for_log=keyword_for_log,
         indent="   ",
     )
-    print(keyword_for_log + "ENDED: Wait until API server of controller is up and running", flush=True)
+    print(
+        keyword_for_log
+        + "ENDED: Wait until API server of controller is up and running",
+        flush=True,
+    )
 
     # Step2. Login Aviatrix Controller with username: Admin and password: private ip address and verify login
-    print(keyword_for_log + "START: Login Aviatrix Controller as admin using private ip address", flush=True)
+    print(
+        keyword_for_log
+        + "START: Login Aviatrix Controller as admin using private ip address",
+        flush=True,
+    )
     response = login(
         api_endpoint_url=api_endpoint_url,
         username="admin",
         password=ucc_private_ip,
         hide_password=False,
-        keyword_for_log=keyword_for_log
+        keyword_for_log=keyword_for_log,
     )
 
-    verify_aviatrix_api_response_login(response=response, keyword_for_log=keyword_for_log, indent="   ")
+    verify_aviatrix_api_response_login(
+        response=response, keyword_for_log=keyword_for_log, indent="   "
+    )
     CID = response.json()["CID"]
-    print(keyword_for_log + "END: Login Aviatrix Controller as admin using private ip address", flush=True)
+    print(
+        keyword_for_log
+        + "END: Login Aviatrix Controller as admin using private ip address",
+        flush=True,
+    )
 
     # Step3. Check if the controller has been initialized or not
-    print(keyword_for_log + "START: Check if Aviatrix Controller has already been initialized", flush=True)
+    print(
+        keyword_for_log
+        + "START: Check if Aviatrix Controller has already been initialized",
+        flush=True,
+    )
     is_controller_initialized = has_controller_initialized(
         api_endpoint_url=api_endpoint_url,
         CID=CID,
         keyword_for_log=keyword_for_log,
-        indent="   "
+        indent="   ",
     )
 
     if is_controller_initialized:
-        print(keyword_for_log + "ERROR: Controller has already been initialized", flush=True)
-        err_msg = "ERROR: Controller has already been initialized"
-        raise AviatrixException(
-            message=err_msg
+        print(
+            keyword_for_log + "ERROR: Controller has already been initialized",
+            flush=True,
         )
-    print(keyword_for_log + 'END: Check if Aviatrix Controller has already been initialized', flush=True)
+        err_msg = "ERROR: Controller has already been initialized"
+        raise AviatrixException(message=err_msg)
+    print(
+        keyword_for_log
+        + "END: Check if Aviatrix Controller has already been initialized",
+        flush=True,
+    )
 
     # Step4. Set admin email
     print(keyword_for_log + "Start: Set admin email", flush=True)
@@ -90,13 +125,11 @@ def function_handler(event):
         api_endpoint_url=api_endpoint_url,
         CID=CID,
         admin_email=admin_email,
-        keyword_for_log=keyword_for_log
+        keyword_for_log=keyword_for_log,
     )
 
     verify_aviatrix_api_set_admin_email(
-        response=response,
-        keyword_for_log=keyword_for_log,
-        indent="   "
+        response=response, keyword_for_log=keyword_for_log, indent="   "
     )
     print(keyword_for_log + "End: Set admin email", flush=True)
 
@@ -108,13 +141,11 @@ def function_handler(event):
         old_admin_password=ucc_private_ip,
         new_admin_password=new_admin_password,
         keyword_for_log=keyword_for_log,
-        indent="   "
+        indent="   ",
     )
 
     verify_aviatrix_api_set_admin_password(
-        response=response,
-        keyword_for_log=keyword_for_log,
-        indent="   "
+        response=response, keyword_for_log=keyword_for_log, indent="   "
     )
     print(keyword_for_log + "End: Set admin password", flush=True)
 
@@ -125,11 +156,13 @@ def function_handler(event):
         username="admin",
         password=new_admin_password,
         keyword_for_log=keyword_for_log,
-        indent="   "
+        indent="   ",
     )
 
     CID = response.json()["CID"]
-    verify_aviatrix_api_set_admin_password(response=response, keyword_for_log=keyword_for_log, indent="   ")
+    verify_aviatrix_api_set_admin_password(
+        response=response, keyword_for_log=keyword_for_log, indent="   "
+    )
     print(keyword_for_log + "End: Login as admin with new password", flush=True)
 
     # Step7. Initial Setup for Aviatrix Controller by Invoking Aviatrix API
@@ -139,14 +172,19 @@ def function_handler(event):
         CID=CID,
         target_version=controller_init_version,
         keyword_for_log=keyword_for_log,
-        indent="   "
+        indent="   ",
     )
-    verify_aviatrix_api_run_initial_setup(response=response, keyword_for_log=keyword_for_log, indent="   ")
+    verify_aviatrix_api_run_initial_setup(
+        response=response, keyword_for_log=keyword_for_log, indent="   "
+    )
     print(keyword_for_log + "End: Aviatrix Controller initial setup", flush=True)
 
     # Step8. Wait until apache server of controller is up and running after initial setup
-    print(keyword_for_log + "START: Wait until API server of Aviatrix Controller is up and running after initial setup",
-          flush=True)
+    print(
+        keyword_for_log
+        + "START: Wait until API server of Aviatrix Controller is up and running after initial setup",
+        flush=True,
+    )
     wait_until_controller_api_server_is_ready(
         ucc_public_ip=ucc_public_ip,
         api_version=aviatrix_api_version,
@@ -156,8 +194,11 @@ def function_handler(event):
         keyword_for_log=keyword_for_log,
         indent="   ",
     )
-    print(keyword_for_log + "End: Wait until API server of Aviatrix Controller is up ans running after initial setup",
-          flush=True)
+    print(
+        keyword_for_log
+        + "End: Wait until API server of Aviatrix Controller is up ans running after initial setup",
+        flush=True,
+    )
 
     # Step9. Re-login
     print(keyword_for_log + "START: Re-login", flush=True)
@@ -165,28 +206,39 @@ def function_handler(event):
         api_endpoint_url=api_endpoint_url,
         username="admin",
         password=new_admin_password,
-        keyword_for_log=keyword_for_log
+        keyword_for_log=keyword_for_log,
     )
-    verify_aviatrix_api_response_login(response=response, keyword_for_log=keyword_for_log, indent="   ")
+    verify_aviatrix_api_response_login(
+        response=response, keyword_for_log=keyword_for_log, indent="   "
+    )
     CID = response.json()["CID"]
-    print(keyword_for_log + 'END: Re-login', flush=True)
+    print(keyword_for_log + "END: Re-login", flush=True)
 
     # Step10. Set Aviatrix Customer ID
     # only BYOL license in Azure
-    print(keyword_for_log + "START: Set Aviatrix Customer ID by invoking aviatrix API", flush=True)
+    print(
+        keyword_for_log + "START: Set Aviatrix Customer ID by invoking aviatrix API",
+        flush=True,
+    )
     response = set_aviatrix_customer_id(
         api_endpoint_url=api_endpoint_url,
         CID=CID,
         customer_id=aviatrix_customer_id,
         keyword_for_log=keyword_for_log,
-        indent="   "
+        indent="   ",
     )
     py_dict = response.json()
     print(keyword_for_log + "Aviatrix API response is : " + str(py_dict), flush=True)
-    print(keyword_for_log + "END: Set Aviatrix Customer ID by invoking aviatrix API", flush=True)
+    print(
+        keyword_for_log + "END: Set Aviatrix Customer ID by invoking aviatrix API",
+        flush=True,
+    )
 
     # Step11. Create Access Account Based on Azure ARM
-    print(keyword_for_log + "START : Create the Access Account based on Azure ARM", flush=True)
+    print(
+        keyword_for_log + "START : Create the Access Account based on Azure ARM",
+        flush=True,
+    )
     response = create_access_account(
         api_endpoint_url=api_endpoint_url,
         CID=CID,
@@ -205,38 +257,33 @@ def function_handler(event):
         response=response,
         admin_email=admin_email,
         keyword_for_log=keyword_for_log,
-        indent="   "
+        indent="   ",
     )
-    print(keyword_for_log + "END : Create the Access Account based on Azure ARM", flush=True)
+    print(
+        keyword_for_log + "END : Create the Access Account based on Azure ARM",
+        flush=True,
+    )
 
 
 def wait_until_controller_api_server_is_ready(
-        ucc_public_ip='123.123.123.123',
-        api_version="v1",
-        api_route="api",
-        total_wait_time=300,
-        interval_wait_time=10,
-        keyword_for_log="aviatrix-function---",
-        indent='',
+    ucc_public_ip="123.123.123.123",
+    api_version="v1",
+    api_route="api",
+    total_wait_time=300,
+    interval_wait_time=10,
+    keyword_for_log="aviatrix-function---",
+    indent="",
 ):
-    payload = {
-        "action": "login",
-        "username": "test",
-        "password": "test"
-    }
+    payload = {"action": "login", "username": "test", "password": "test"}
     api_endpoint_url = "https://" + ucc_public_ip + "/" + api_version + "/" + api_route
 
     # invoke the aviatrix api with a non-existed api
     # to resolve the issue where server status code is 200 but response message is "Valid action required: login"
     # which means backend is not ready yet
-    payload = {
-        "action": "login",
-        "username": "test",
-        "password": "test"
-    }
+    payload = {"action": "login", "username": "test", "password": "test"}
     remaining_wait_time = total_wait_time
 
-    ''' Variable Description: (time_spent_for_requests_lib_timeout)
+    """ Variable Description: (time_spent_for_requests_lib_timeout)
     Description: 
         * This value represents how many seconds for "requests" lib to timeout by default. 
     Detail: 
@@ -244,7 +291,7 @@ def wait_until_controller_api_server_is_ready(
         * If there is a connection error and causing timeout when 
           invoking--> requests.get(xxx), it takes about 20 seconds for requests.get(xxx) to throw timeout exception.
         * When calculating the remaining wait time, this value is considered.
-    '''
+    """
     time_spent_for_requests_lib_timeout = 20
     last_err_msg = ""
     while remaining_wait_time > 0:
@@ -255,11 +302,7 @@ def wait_until_controller_api_server_is_ready(
             is_api_service_ready = False
 
             # invoke a dummy REST API to Aviatrix controller
-            response = requests.post(
-                url=api_endpoint_url,
-                data=payload,
-                verify=False
-            )
+            response = requests.post(url=api_endpoint_url, data=payload, verify=False)
 
             # check response
             # if the server is ready, the response code should be 200.
@@ -270,19 +313,31 @@ def wait_until_controller_api_server_is_ready(
             #           which means the server is ready
             if response is not None:
                 response_status_code = response.status_code
-                print(indent + keyword_for_log + "Server status code is: " + str(response_status_code), flush=True)
+                print(
+                    indent
+                    + keyword_for_log
+                    + "Server status code is: "
+                    + str(response_status_code),
+                    flush=True,
+                )
                 py_dict = response.json()
                 if response.status_code == 200:
                     is_apache_returned_200 = True
 
-                response_message = py_dict['reason']
+                response_message = py_dict["reason"]
                 response_msg_indicates_backend_not_ready = "Valid action required"
                 # case1:
-                if py_dict['return'] is False and response_msg_indicates_backend_not_ready in response_message:
+                if (
+                    py_dict["return"] is False
+                    and response_msg_indicates_backend_not_ready in response_message
+                ):
                     is_api_service_ready = False
                     print(
-                        indent + keyword_for_log + "Server is not ready, and the response is :( " +
-                        response_message + ")"
+                        indent
+                        + keyword_for_log
+                        + "Server is not ready, and the response is :( "
+                        + response_message
+                        + ")"
                     )
                 # case2:
                 else:
@@ -294,15 +349,24 @@ def wait_until_controller_api_server_is_ready(
                 print(indent + keyword_for_log + "Server is ready", flush=True)
                 return True
         except Exception as e:
-            print(indent + keyword_for_log + "Aviatrix Controller " + api_endpoint_url + " is not available",
-                  flush=True)
+            print(
+                indent
+                + keyword_for_log
+                + "Aviatrix Controller "
+                + api_endpoint_url
+                + " is not available",
+                flush=True,
+            )
             last_err_msg = str(e)
             pass
             # END try-except
 
             # handle the response code is 404
             if response_status_code == 404:
-                err_msg = "Error: Aviatrix Controller returns error code: 404 for " + api_endpoint_url
+                err_msg = (
+                    "Error: Aviatrix Controller returns error code: 404 for "
+                    + api_endpoint_url
+                )
                 raise AviatrixException(
                     message=err_msg,
                 )
@@ -311,17 +375,29 @@ def wait_until_controller_api_server_is_ready(
         # if server response code is neither 200 nor 404, some other errors occurs
         # repeat the process till reaches case 2
 
-        remaining_wait_time = remaining_wait_time - interval_wait_time - time_spent_for_requests_lib_timeout
+        remaining_wait_time = (
+            remaining_wait_time
+            - interval_wait_time
+            - time_spent_for_requests_lib_timeout
+        )
         if remaining_wait_time > 0:
             time.sleep(interval_wait_time)
     # END while loop
 
     # if the server is still not ready after the default time
     # raise AviatrixException
-    err_msg = "Aviatrix Controller " + api_endpoint_url + " is not available after " + \
-              str(total_wait_time) + " seconds" + \
-              "Server status code is: " + str(response_status_code) + ". " + \
-              "The response message is: " + last_err_msg
+    err_msg = (
+        "Aviatrix Controller "
+        + api_endpoint_url
+        + " is not available after "
+        + str(total_wait_time)
+        + " seconds"
+        + "Server status code is: "
+        + str(response_status_code)
+        + ". "
+        + "The response message is: "
+        + last_err_msg
+    )
     raise AviatrixException(
         message=err_msg,
     )
@@ -329,21 +405,21 @@ def wait_until_controller_api_server_is_ready(
 
 # END wait_until_controller_api_server_is_ready()
 
+
 def login(
-        api_endpoint_url="https://123.123.123.123/v1/api",
-        username="admin",
-        password="********",
-        hide_password=True,
-        keyword_for_log="avx-function---",
-        indent="      "
+    api_endpoint_url="https://123.123.123.123/v1/api",
+    username="admin",
+    password="********",
+    hide_password=True,
+    keyword_for_log="avx-function---",
+    indent="      ",
 ):
     request_method = "POST"
-    data = {
-        "action": "login",
-        "username": username,
-        "password": password
-    }
-    print(indent + keyword_for_log + "API endpoint url is :" + api_endpoint_url, flush=True)
+    data = {"action": "login", "username": username, "password": password}
+    print(
+        indent + keyword_for_log + "API endpoint url is :" + api_endpoint_url,
+        flush=True,
+    )
     print(indent + keyword_for_log + "Request method is :" + request_method, flush=True)
 
     # handle if the hide_password is selected
@@ -351,13 +427,17 @@ def login(
         payload_with_hidden_password = dict(data)
         payload_with_hidden_password["password"] = "************"
         print(
-            indent + keyword_for_log + "Request payload     : " +
-            str(json.dumps(obj=payload_with_hidden_password, indent=4))
+            indent
+            + keyword_for_log
+            + "Request payload     : "
+            + str(json.dumps(obj=payload_with_hidden_password, indent=4))
         )
     else:
         print(
-            indent + keyword_for_log + "Request payload     : " +
-            str(json.dumps(obj=data, indent=4))
+            indent
+            + keyword_for_log
+            + "Request payload     : "
+            + str(json.dumps(obj=data, indent=4))
         )
 
     # send post request to the api endpoint
@@ -366,21 +446,22 @@ def login(
         request_method=request_method,
         payload=data,
         keyword_for_log=keyword_for_log,
-        indent=indent + "   "
+        indent=indent + "   ",
     )
     return response
 
 
 # End def login()
 
+
 def send_aviatrix_api(
-        api_endpoint_url="https://123.123.123.123/v1/api",
-        request_method="POST",
-        payload=dict(),
-        retry_count=5,
-        keyword_for_log="avx-function---",
-        indent="",
-        timeout=None
+    api_endpoint_url="https://123.123.123.123/v1/api",
+    request_method="POST",
+    payload=dict(),
+    retry_count=5,
+    keyword_for_log="avx-function---",
+    indent="",
+    timeout=None,
 ):
     response = None
     responses = list()
@@ -390,10 +471,14 @@ def send_aviatrix_api(
     for i in range(retry_count):
         try:
             if request_type == "GET":
-                response = requests.get(url=api_endpoint_url, params=payload, verify=False)
+                response = requests.get(
+                    url=api_endpoint_url, params=payload, verify=False
+                )
                 response_status_code = response.status_code
             elif request_type == "POST":
-                response = requests.post(url=api_endpoint_url, data=payload, verify=False, timeout=timeout)
+                response = requests.post(
+                    url=api_endpoint_url, data=payload, verify=False, timeout=timeout
+                )
                 response_status_code = response.status_code
             else:
                 failure_reason = "ERROR : Bad HTTPS request type: " + request_type
@@ -402,14 +487,23 @@ def send_aviatrix_api(
             print(indent + keyword_for_log + "WARNING: Request timeout...", flush=True)
             responses.append(str(e))
         except requests.exceptions.ConnectionError as e:
-            print(indent + keyword_for_log + "WARNING: Server is not responding...", flush=True)
+            print(
+                indent + keyword_for_log + "WARNING: Server is not responding...",
+                flush=True,
+            )
             responses.append(str(e))
         except Exception as e:
             traceback_msg = traceback.format_exc()
-            print(indent + keyword_for_log + "Aviatrix Exception, the traceback message is: ", flush=True)
+            print(
+                indent
+                + keyword_for_log
+                + "Aviatrix Exception, the traceback message is: ",
+                flush=True,
+            )
             print(indent + traceback_msg, flush=True)
             failure_reason = "Aviatrix Exception, the traceback message is: " + str(
-                traceback_msg)
+                traceback_msg
+            )
             print(indent + keyword_for_log + failure_reason, flush=True)
             responses.append(str(traceback_msg))
             # For error message/debugging purposes
@@ -431,16 +525,21 @@ def send_aviatrix_api(
                 print(indent + keyword_for_log + "    i == " + str(i), flush=True)
                 wait_time_before_retry = pow(2, i)
                 print(
-                    indent + keyword_for_log + " Wait for: " + str(wait_time_before_retry) +
-                    " s for the next retry"
+                    indent
+                    + keyword_for_log
+                    + " Wait for: "
+                    + str(wait_time_before_retry)
+                    + " s for the next retry"
                 )
                 time.sleep(wait_time_before_retry)
                 print(indent + keyword_for_log + "ENDED: Wait until retry", flush=True)
                 # continue next iteration
             else:
-                failure_reason = "ERROR: Failed to invoke Aviatrix API. Exceed the max retry times. " + \
-                                 " All responses are listed as follows :  " + \
-                                 str(responses)
+                failure_reason = (
+                    "ERROR: Failed to invoke Aviatrix API. Exceed the max retry times. "
+                    + " All responses are listed as follows :  "
+                    + str(responses)
+                )
                 raise AviatrixException(
                     message=failure_reason,
                 )
@@ -450,21 +549,27 @@ def send_aviatrix_api(
 
 # End def send_aviatrix_api()
 
-def verify_aviatrix_api_response_login(response=None, keyword_for_log="avx-function---", indent="   "):
+
+def verify_aviatrix_api_response_login(
+    response=None, keyword_for_log="avx-function---", indent="   "
+):
     # if successfully login
     # response_code == 200
     # api_return_boolean == true
     # response_message = "authorized successfully"
 
     py_dict = response.json()
-    print(indent + keyword_for_log + "Aviatrix API response is " + str(py_dict), flush=True)
+    print(
+        indent + keyword_for_log + "Aviatrix API response is " + str(py_dict),
+        flush=True,
+    )
 
     response_code = response.status_code
     if response_code != 200:
-        err_msg = "Fail to login Aviatrix Controller. The response code is" + response_code
-        raise AviatrixException(
-            message=err_msg
+        err_msg = (
+            "Fail to login Aviatrix Controller. The response code is" + response_code
         )
+        raise AviatrixException(message=err_msg)
 
     api_return_boolean = py_dict["return"]
     if api_return_boolean is not True:
@@ -484,32 +589,44 @@ def verify_aviatrix_api_response_login(response=None, keyword_for_log="avx-funct
 
 # End def verify_aviatrix_api_response_login()
 
+
 def has_controller_initialized(
-        api_endpoint_url="123.123.123.123/v1/api",
-        CID="ABCD1234",
-        keyword_for_log="avx-azure-function",
-        indent=""
+    api_endpoint_url="123.123.123.123/v1/api",
+    CID="ABCD1234",
+    keyword_for_log="avx-azure-function",
+    indent="",
 ):
     request_method = "GET"
-    data = {
-        "action": "initial_setup",
-        "subaction": "check",
-        "CID": CID
-    }
-    print(indent + keyword_for_log + "API endpoint url   : " + str(api_endpoint_url), flush=True)
-    print(indent + keyword_for_log + "Request method is : " + str(request_method), flush=True)
-    print(indent + keyword_for_log + "Request payload is : " + str(json.dumps(obj=data, indent=4)), flush=True)
+    data = {"action": "initial_setup", "subaction": "check", "CID": CID}
+    print(
+        indent + keyword_for_log + "API endpoint url   : " + str(api_endpoint_url),
+        flush=True,
+    )
+    print(
+        indent + keyword_for_log + "Request method is : " + str(request_method),
+        flush=True,
+    )
+    print(
+        indent
+        + keyword_for_log
+        + "Request payload is : "
+        + str(json.dumps(obj=data, indent=4)),
+        flush=True,
+    )
 
     response = send_aviatrix_api(
         api_endpoint_url=api_endpoint_url,
         request_method=request_method,
         payload=data,
         keyword_for_log=keyword_for_log,
-        indent=indent + "   "
+        indent=indent + "   ",
     )
 
     py_dict = response.json()
-    print(indent + keyword_for_log + "Aviatrix API response is :" + str(py_dict), flush=True)
+    print(
+        indent + keyword_for_log + "Aviatrix API response is :" + str(py_dict),
+        flush=True,
+    )
 
     if py_dict["return"] is False and "not run" in py_dict["reason"]:
         return False
@@ -519,71 +636,85 @@ def has_controller_initialized(
 
 # End def has_controller_initialized()
 
+
 def set_admin_email(
-        api_endpoint_url="123.123.123.123/v1/api",
-        CID="ABCD1234",
-        admin_email="avx@aviatrix.com",
-        keyword_for_log="avx-function---",
-        indent="   "
+    api_endpoint_url="123.123.123.123/v1/api",
+    CID="ABCD1234",
+    admin_email="avx@aviatrix.com",
+    keyword_for_log="avx-function---",
+    indent="   ",
 ):
     request_method = "POST"
-    data = {
-        "action": "add_admin_email_addr",
-        "CID": CID,
-        "admin_email": admin_email
-    }
-    print(indent + keyword_for_log + "API endpoint url is : " + str(api_endpoint_url), flush=True)
-    print(indent + keyword_for_log + "Request method is : " + str(request_method), flush=True)
-    print(indent + keyword_for_log + "Request payload is : " + str(json.dumps(obj=data, indent=4)), flush=True)
+    data = {"action": "add_admin_email_addr", "CID": CID, "admin_email": admin_email}
+    print(
+        indent + keyword_for_log + "API endpoint url is : " + str(api_endpoint_url),
+        flush=True,
+    )
+    print(
+        indent + keyword_for_log + "Request method is : " + str(request_method),
+        flush=True,
+    )
+    print(
+        indent
+        + keyword_for_log
+        + "Request payload is : "
+        + str(json.dumps(obj=data, indent=4)),
+        flush=True,
+    )
 
     response = send_aviatrix_api(
         api_endpoint_url=api_endpoint_url,
         request_method=request_method,
         payload=data,
         keyword_for_log=keyword_for_log,
-        indent=indent + "   "
+        indent=indent + "   ",
     )
     return response
 
 
 # End def set_admin_email()
 
+
 def verify_aviatrix_api_set_admin_email(
-        response=None,
-        keyword_for_log="avx-azure-function---",
-        indent="   "
+    response=None, keyword_for_log="avx-azure-function---", indent="   "
 ):
     # if the set admin email request is successful
     # the response code is 200 and the returned message is "admin email address has been successfully added"
     py_dict = response.json()
-    print(indent + keyword_for_log + "Aviatrix API response is " + str(py_dict), flush=True)
+    print(
+        indent + keyword_for_log + "Aviatrix API response is " + str(py_dict),
+        flush=True,
+    )
 
     response_code = response.status_code
     if response_code != 200:
-        err_msg = "Fail for set admin email for the Aviatrix Controller. The response code is" + response_code
-        raise AviatrixException(
-            message=err_msg
+        err_msg = (
+            "Fail for set admin email for the Aviatrix Controller. The response code is"
+            + response_code
         )
+        raise AviatrixException(message=err_msg)
 
     api_return_message = py_dict["results"]
     expected_string = "admin email address has been successfully added"
     if (expected_string in api_return_message) is False:
-        err_msg = "Fail for set admin email for Aviatrix Controller. The expected string " + expected_string + \
-                  " is not found in returned message"
-        raise AviatrixException(
-            message=err_msg
+        err_msg = (
+            "Fail for set admin email for Aviatrix Controller. The expected string "
+            + expected_string
+            + " is not found in returned message"
         )
+        raise AviatrixException(message=err_msg)
 
 
 # End def verify_aviatrix_api_set_admin_email()
 
+
 def set_admin_password(
-        api_endpoint_url="123.123.123.123/v1/api",
-        CID="ABCD1234",
-        old_admin_password="********",
-        new_admin_password="********",
-        keyword_for_log="avx-function---",
-        indent="   "
+    api_endpoint_url="123.123.123.123/v1/api",
+    CID="ABCD1234",
+    old_admin_password="********",
+    new_admin_password="********",
+    keyword_for_log="avx-function---",
+    indent="   ",
 ):
     # The api name changes from "change_password" to "edit_account_user"
     request_method = "POST"
@@ -598,22 +729,35 @@ def set_admin_password(
     payload_with_hidden_password = dict(data_1st_try)
     payload_with_hidden_password["new_password"] = "********"
 
-    print(indent + keyword_for_log + "API endpoint url is : " + str(api_endpoint_url), flush=True)
-    print(indent + keyword_for_log + "Request method is : " + str(request_method), flush=True)
-    print(indent + keyword_for_log + "Request payload is : " + str(
-        json.dumps(obj=payload_with_hidden_password, indent=4)))
+    print(
+        indent + keyword_for_log + "API endpoint url is : " + str(api_endpoint_url),
+        flush=True,
+    )
+    print(
+        indent + keyword_for_log + "Request method is : " + str(request_method),
+        flush=True,
+    )
+    print(
+        indent
+        + keyword_for_log
+        + "Request payload is : "
+        + str(json.dumps(obj=payload_with_hidden_password, indent=4))
+    )
 
     response = send_aviatrix_api(
         api_endpoint_url=api_endpoint_url,
         request_method=request_method,
         payload=data_1st_try,
         keyword_for_log=keyword_for_log,
-        indent=indent + "   "
+        indent=indent + "   ",
     )
 
     # if response return false the "Valid action required"
     # the api doesn't exist
-    if response.json()["return"] == False and "Valid action required" in response.json()["reason"]:
+    if (
+        response.json()["return"] == False
+        and "Valid action required" in response.json()["reason"]
+    ):
         is_successfully_changed_password = False
     else:
         return response
@@ -625,22 +769,32 @@ def set_admin_password(
         "account_name": "admin",
         "username": "admin",
         "old_password": old_admin_password,
-        "password": new_admin_password
+        "password": new_admin_password,
     }
     payload_with_hidden_password = dict(data_2nd_try)
     payload_with_hidden_password["password"] = "********"
 
-    print(indent + keyword_for_log + "API endpoint url is : " + str(api_endpoint_url), flush=True)
-    print(indent + keyword_for_log + "Request method is : " + str(request_method), flush=True)
-    print(indent + keyword_for_log + "Request payload is : " + str(
-        json.dumps(obj=payload_with_hidden_password, indent=4)))
+    print(
+        indent + keyword_for_log + "API endpoint url is : " + str(api_endpoint_url),
+        flush=True,
+    )
+    print(
+        indent + keyword_for_log + "Request method is : " + str(request_method),
+        flush=True,
+    )
+    print(
+        indent
+        + keyword_for_log
+        + "Request payload is : "
+        + str(json.dumps(obj=payload_with_hidden_password, indent=4))
+    )
 
     response = send_aviatrix_api(
         api_endpoint_url=api_endpoint_url,
         request_method=request_method,
         payload=data_2nd_try,
         keyword_for_log=keyword_for_log,
-        indent=indent + "   "
+        indent=indent + "   ",
     )
 
     return response
@@ -648,62 +802,74 @@ def set_admin_password(
 
 # End def set_admin_password()
 
+
 def verify_aviatrix_api_set_admin_password(
-        response=None,
-        keyword_for_log="avx-function---",
-        indent=""
+    response=None, keyword_for_log="avx-function---", indent=""
 ):
     # if the set admin password request is successful
     # the response code is 200 and the return true
     py_dict = response.json()
-    print(indent + keyword_for_log + "Aviatrix API response is : " + str(py_dict), flush=True)
+    print(
+        indent + keyword_for_log + "Aviatrix API response is : " + str(py_dict),
+        flush=True,
+    )
 
     response_code = response.status_code
     if response_code != 200:
-        err_msg = "Fail to set admin password, the response code is : " + str(response_code) + ", which is not 200"
-        raise AviatrixException(
-            message=err_msg
+        err_msg = (
+            "Fail to set admin password, the response code is : "
+            + str(response_code)
+            + ", which is not 200"
         )
+        raise AviatrixException(message=err_msg)
 
     api_return_boolean = py_dict["return"]
     if api_return_boolean is not True:
-        err_msg = "Fail to set admin password for Aviatrix Controller. API response is :" + str(py_dict)
-        raise AviatrixException(
-            message=err_msg
+        err_msg = (
+            "Fail to set admin password for Aviatrix Controller. API response is :"
+            + str(py_dict)
         )
+        raise AviatrixException(message=err_msg)
 
 
 # End def verify_aviatrix_api_set_admin_password()
 
+
 def run_initial_setup(
-        api_endpoint_url="123.123.123.123/v1/api",
-        CID="ABCD1234",
-        target_version="latest",
-        keyword_for_log="avx-azure-function---",
-        indent="   "
+    api_endpoint_url="123.123.123.123/v1/api",
+    CID="ABCD1234",
+    target_version="latest",
+    keyword_for_log="avx-azure-function---",
+    indent="   ",
 ):
     request_method = "POST"
 
     # Step1 : Check if the controller has been already initialized
     #       --> yes
     #       --> no --> run init setup (upgrading to the latest controller version)
-    data = {
-        "action": "initial_setup",
-        "CID": CID,
-        "subaction": "check"
-    }
-    print(indent + keyword_for_log + "Check if the initial setup has been already done or not", flush=True)
+    data = {"action": "initial_setup", "CID": CID, "subaction": "check"}
+    print(
+        indent
+        + keyword_for_log
+        + "Check if the initial setup has been already done or not",
+        flush=True,
+    )
     response = send_aviatrix_api(
         api_endpoint_url=api_endpoint_url,
         request_method=request_method,
         payload=data,
         keyword_for_log=keyword_for_log,
-        indent=indent + "   "
+        indent=indent + "   ",
     )
     py_dict = response.json()
     # The initial setup has been done
     if py_dict["return"] is True:
-        print(indent + keyword_for_log + "Initial setup for Aviatrix Controller has been already done", flush=True)
+        print(
+            indent
+            + keyword_for_log
+            + "Initial setup for Aviatrix Controller has been already done",
+            flush=True,
+        )
         return response
 
     # The initial setup has not been done yet
@@ -711,11 +877,23 @@ def run_initial_setup(
         "action": "initial_setup",
         "CID": CID,
         "target_version": target_version,
-        "subaction": "run"
+        "subaction": "run",
     }
-    print(indent + keyword_for_log + "API endpoint url   : " + str(api_endpoint_url), flush=True)
-    print(indent + keyword_for_log + "Request method is : " + str(request_method), flush=True)
-    print(indent + keyword_for_log + "Request payload is: " + str(json.dumps(obj=data, indent=4)), flush=True)
+    print(
+        indent + keyword_for_log + "API endpoint url   : " + str(api_endpoint_url),
+        flush=True,
+    )
+    print(
+        indent + keyword_for_log + "Request method is : " + str(request_method),
+        flush=True,
+    )
+    print(
+        indent
+        + keyword_for_log
+        + "Request payload is: "
+        + str(json.dumps(obj=data, indent=4)),
+        flush=True,
+    )
     try:
         response = send_aviatrix_api(
             api_endpoint_url=api_endpoint_url,
@@ -724,7 +902,7 @@ def run_initial_setup(
             keyword_for_log=keyword_for_log,
             indent=indent + "   ",
             retry_count=1,
-            timeout=300
+            timeout=300,
         )
     except AviatrixException as ae:
         # Ignore timeout exception since it is expected
@@ -737,76 +915,90 @@ def run_initial_setup(
 
 # End def run_initial_setup()
 
+
 def verify_aviatrix_api_run_initial_setup(
-        response=None,
-        keyword_for_log="avx-function---",
-        indent="   "
+    response=None, keyword_for_log="avx-function---", indent="   "
 ):
     if not response:
         return
     py_dict = response.json()
-    print(indent + keyword_for_log + "Aviatrix API response is : " + str(py_dict), flush=True)
+    print(
+        indent + keyword_for_log + "Aviatrix API response is : " + str(py_dict),
+        flush=True,
+    )
 
     response_code = response.status_code
     if response_code != 200:
-        err_msg = "Fail to run initial setup for the Aviatrix Controller. The actual response code is " + \
-                  str(response_code) + ", which is not 200"
-        raise AviatrixException(
-            message=err_msg
+        err_msg = (
+            "Fail to run initial setup for the Aviatrix Controller. The actual response code is "
+            + str(response_code)
+            + ", which is not 200"
         )
+        raise AviatrixException(message=err_msg)
 
     api_return_boolean = py_dict["return"]
     if api_return_boolean is not True:
-        err_msg = "Fail to run initial setup for the Aviatrix Controller. The actual api response is  " + str(py_dict)
-        raise AviatrixException(
-            message=err_msg
+        err_msg = (
+            "Fail to run initial setup for the Aviatrix Controller. The actual api response is  "
+            + str(py_dict)
         )
+        raise AviatrixException(message=err_msg)
     pass
 
 
 # End def verify_aviatrix_api_run_initial_setup()
 
+
 def set_aviatrix_customer_id(
-        api_endpoint_url="https://123.123.123.123/v1/api",
-        CID="ABCD1234",
-        customer_id="aviatrix-1234567.89",
-        keyword_for_log="avx-function---",
-        indent="    "
+    api_endpoint_url="https://123.123.123.123/v1/api",
+    CID="ABCD1234",
+    customer_id="aviatrix-1234567.89",
+    keyword_for_log="avx-function---",
+    indent="    ",
 ):
     request_method = "POST"
-    data = {
-        "action": "setup_customer_id",
-        "CID": CID,
-        "customer_id": customer_id
-    }
-    print(indent + keyword_for_log + "API endpoint url is : " + str(api_endpoint_url), flush=True)
-    print(indent + keyword_for_log + "Request method is : " + str(request_method), flush=True)
-    print(indent + keyword_for_log + "Request payload is: " + str(json.dumps(obj=data, indent=4)), flush=True)
+    data = {"action": "setup_customer_id", "CID": CID, "customer_id": customer_id}
+    print(
+        indent + keyword_for_log + "API endpoint url is : " + str(api_endpoint_url),
+        flush=True,
+    )
+    print(
+        indent + keyword_for_log + "Request method is : " + str(request_method),
+        flush=True,
+    )
+    print(
+        indent
+        + keyword_for_log
+        + "Request payload is: "
+        + str(json.dumps(obj=data, indent=4)),
+        flush=True,
+    )
 
     response = send_aviatrix_api(
         api_endpoint_url=api_endpoint_url,
         request_method=request_method,
         payload=data,
         keyword_for_log=keyword_for_log,
-        indent=indent + "    "
+        indent=indent + "    ",
     )
     return response
 
 
 # End def set_aviatrix_customer_id()
 
+
 def create_access_account(
-        api_endpoint_url="123.123.123.123/v1/api",
-        CID="ABCD1234",
-        account_name="avx_access_account",
-        cloud_type="8",
-        account_email="test@aviatrix.com",
-        arm_subscription_id="dsdfwbb7-1196-40bb-8435-dc2e98jriojfae8f",
-        arm_application_endpoint="4780055e-ce37-4f02-b33d-fdad8493a4b6",
-        arm_application_client_id="wfwek98f-c904-479f-def2-23ijrodsof",
-        arm_application_client_secret="abcd1234xyz",
-        keyword_for_log="avx-function---",
-        indent="   "
+    api_endpoint_url="123.123.123.123/v1/api",
+    CID="ABCD1234",
+    account_name="avx_access_account",
+    cloud_type="8",
+    account_email="test@aviatrix.com",
+    arm_subscription_id="dsdfwbb7-1196-40bb-8435-dc2e98jriojfae8f",
+    arm_application_endpoint="4780055e-ce37-4f02-b33d-fdad8493a4b6",
+    arm_application_client_id="wfwek98f-c904-479f-def2-23ijrodsof",
+    arm_application_client_secret="abcd1234xyz",
+    keyword_for_log="avx-function---",
+    indent="   ",
 ):
     request_method = "POST"
     data = {
@@ -824,54 +1016,69 @@ def create_access_account(
     payload_with_hidden_password = dict(data)
     payload_with_hidden_password["account_password"] = "************"
 
-    print(indent + keyword_for_log + "API endpoint url is : " + str(api_endpoint_url), flush=True)
     print(
-        indent + keyword_for_log + "Request payload is : " +
-        str(json.dumps(obj=payload_with_hidden_password, indent=4))
+        indent + keyword_for_log + "API endpoint url is : " + str(api_endpoint_url),
+        flush=True,
     )
-    print(indent + keyword_for_log + "Request method is : " + str(request_method), flush=True)
+    print(
+        indent
+        + keyword_for_log
+        + "Request payload is : "
+        + str(json.dumps(obj=payload_with_hidden_password, indent=4))
+    )
+    print(
+        indent + keyword_for_log + "Request method is : " + str(request_method),
+        flush=True,
+    )
 
     response = send_aviatrix_api(
         api_endpoint_url=api_endpoint_url,
         request_method=request_method,
         payload=data,
         keyword_for_log=keyword_for_log,
-        indent=indent + "   "
+        indent=indent + "   ",
     )
     return response
 
 
 # End def create_access_account()
 
+
 def verify_aviatrix_api_create_access_account(
-        response=None,
-        admin_email="test@aviatrix.com",
-        keyword_for_log="avx-function---",
-        indent="   "
+    response=None,
+    admin_email="test@aviatrix.com",
+    keyword_for_log="avx-function---",
+    indent="   ",
 ):
     py_dict = response.json()
-    print(indent + keyword_for_log + "Aviatrix API response is : " + str(py_dict), flush=True)
+    print(
+        indent + keyword_for_log + "Aviatrix API response is : " + str(py_dict),
+        flush=True,
+    )
 
     response_code = response.status_code
     if response_code != 200:
-        err_msg = "Fail to create the access account. The actual response code is : " + str(response_code) + \
-                  ", which is not 200"
-        raise AviatrixException(
-            message=err_msg
+        err_msg = (
+            "Fail to create the access account. The actual response code is : "
+            + str(response_code)
+            + ", which is not 200"
         )
+        raise AviatrixException(message=err_msg)
     api_return_boolean = py_dict["return"]
     if api_return_boolean is not True:
         err_msg = "Fail to create the access account. The response is : " + str(py_dict)
-        raise AviatrixException(
-            message=err_msg
-        )
+        raise AviatrixException(message=err_msg)
 
     api_return_msg = py_dict["results"]
     expected_string = "An email confirmation has been sent to {email_address}"
     expected_string = expected_string.format(email_address=account_email)
     if (expected_string in api_return_msg) is False:
-        avx_err_msg = "Fail to create the access account. API actual return message is: " + \
-                      str(py_dict) + " The string we expect to find is: " + expected_string
+        avx_err_msg = (
+            "Fail to create the access account. API actual return message is: "
+            + str(py_dict)
+            + " The string we expect to find is: "
+            + expected_string
+        )
         raise AviatrixException(
             message=avx_err_msg,
         )
@@ -921,4 +1128,7 @@ if __name__ == "__main__":
         azure_failure_reason = "Error! Aviatrix Azure Function failed due to " + str(e)
         print(azure_failure_reason, flush=True)
 
-    print("Aviatrix Controller " + ucc_public_ip + " has been initialized successfully", flush=True)
+    print(
+        "Aviatrix Controller " + ucc_public_ip + " has been initialized successfully",
+        flush=True,
+    )
