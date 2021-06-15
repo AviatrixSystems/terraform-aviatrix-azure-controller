@@ -39,12 +39,7 @@ def function_handler(event):
     aviatrix_customer_id = aviatrix_customer_id.rstrip()
     aviatrix_customer_id = aviatrix_customer_id.lstrip()
     api_endpoint_url = (
-        "https://"
-        + hostname
-        + "/"
-        + aviatrix_api_version
-        + "/"
-        + aviatrix_api_route
+        "https://" + hostname + "/" + aviatrix_api_version + "/" + aviatrix_api_route
     )
 
     # Step1. Wait until the rest API service of Aviatrix Controller is up and running
