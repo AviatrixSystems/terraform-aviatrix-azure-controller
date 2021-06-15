@@ -19,7 +19,7 @@ class AviatrixException(Exception):
 
 
 def function_handler(event):
-    ucc_public_ip = event["ucc_public_ip"]
+    hostname = event["hostname"]
     aviatrix_api_version = event["aviatrix_api_version"]
     aviatrix_api_route = event["aviatrix_api_route"]
     ucc_private_ip = event["ucc_private_ip"]
@@ -40,7 +40,7 @@ def function_handler(event):
     aviatrix_customer_id = aviatrix_customer_id.lstrip()
     api_endpoint_url = (
         "https://"
-        + ucc_public_ip
+        + hostname
         + "/"
         + aviatrix_api_version
         + "/"
@@ -53,7 +53,7 @@ def function_handler(event):
     )
 
     wait_until_controller_api_server_is_ready(
-        ucc_public_ip=ucc_public_ip,
+        hostname=hostname,
         api_version=aviatrix_api_version,
         api_route=aviatrix_api_route,
         total_wait_time=wait_time,
@@ -138,7 +138,7 @@ def function_handler(event):
         "START: Wait until API server of Aviatrix Controller is up and running after initial setup"
     )
     wait_until_controller_api_server_is_ready(
-        ucc_public_ip=ucc_public_ip,
+        hostname=hostname,
         api_version=aviatrix_api_version,
         api_route=aviatrix_api_route,
         total_wait_time=wait_time,
@@ -193,14 +193,14 @@ def function_handler(event):
 
 
 def wait_until_controller_api_server_is_ready(
-    ucc_public_ip="123.123.123.123",
+    hostname="123.123.123.123",
     api_version="v1",
     api_route="api",
     total_wait_time=300,
     interval_wait_time=10,
 ):
     payload = {"action": "login", "username": "test", "password": "test"}
-    api_endpoint_url = "https://" + ucc_public_ip + "/" + api_version + "/" + api_route
+    api_endpoint_url = "https://" + hostname + "/" + api_version + "/" + api_route
 
     # invoke the aviatrix api with a non-existed api
     # to resolve the issue where server status code is 200 but response message is "Valid action required: login"
@@ -832,7 +832,7 @@ if __name__ == "__main__":
         format="%(asctime)s aviatrix-azure-function--- %(message)s", level=logging.INFO
     )
 
-    ucc_public_ip = sys.argv[1]
+    hostname = sys.argv[1]
     ucc_private_ip = sys.argv[2]
     admin_email = sys.argv[3]
     new_admin_password = sys.argv[4]
@@ -845,7 +845,7 @@ if __name__ == "__main__":
     aviatrix_customer_id = sys.argv[11]
 
     event = {
-        "ucc_public_ip": ucc_public_ip,
+        "hostname": hostname,
         "ucc_private_ip": ucc_private_ip,
         "aviatrix_api_version": "v1",
         "aviatrix_api_route": "api",
