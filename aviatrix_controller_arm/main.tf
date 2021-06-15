@@ -8,18 +8,12 @@ resource "null_resource" "accept_license" {
 
 # 1.Create the Azure AD APP
 resource "azuread_application" "aviatrix_ad_app" {
-  name = var.app_name
+  display_name = var.app_name
 }
 
 # 2. Create the password for the created APP
-// Generate a random string
-resource "random_string" "password" {
-  length  = 32
-  special = false
-}
 resource "azuread_application_password" "aviatrix_app_password" {
   application_object_id = azuread_application.aviatrix_ad_app.id
-  value                 = random_string.password.result
   end_date              = "2120-12-30T23:00:00Z"
 }
 
@@ -29,11 +23,8 @@ resource "azuread_service_principal" "aviatrix_sp" {
 }
 
 # 4. Create the password for the created SP
-// Generate a random string
-// Associate the random password with the created SP
 resource "azuread_service_principal_password" "aviatrix_sp_password" {
   service_principal_id = azuread_service_principal.aviatrix_sp.id
-  value                = random_string.password.result
   end_date             = "2120-12-30T23:00:00Z"
 }
 
