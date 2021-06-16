@@ -9,10 +9,11 @@ module "aviatrix_controller_arm" {
 }
 
 module "aviatrix_controller_build" {
-  source          = "./aviatrix_controller_build"
+  source = "./aviatrix_controller_build"
   // please do not use special characters such as `\/"[]:|<>+=;,?*@&~!#$%^()_{}'` in the controller_name
   controller_name = "<< your Aviatrix Controller name >>"
-  depends_on      = [module.aviatrix_controller_arm]
+  depends_on = [
+  module.aviatrix_controller_arm]
 }
 
 module "aviatrix_controller_initialize" {
@@ -29,7 +30,8 @@ module "aviatrix_controller_initialize" {
   access_account_name           = "<< your account name mapping to your Azure account >>"
   aviatrix_customer_id          = "<< your customer license id >>"
   terraform_module_path         = "<< absolute path of this terraform module >>"
-  depends_on                    = [module.aviatrix_controller_arm]
+  depends_on = [
+  module.aviatrix_controller_arm]
 }
 
 output "subscription_id" {
