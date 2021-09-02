@@ -1,7 +1,7 @@
 // accept license of Aviatrix Controller
 resource "null_resource" "accept_license" {
   provisioner "local-exec" {
-    command = "python3 ${var.terraform_module_path}/aviatrix_controller_arm/accept_license.py"
+    command = "python3 ${var.terraform_module_path == "" ? path.module : var.terraform_module_path}/accept_license.py"
   }
 }
 
