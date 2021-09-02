@@ -1,6 +1,6 @@
 locals {
   option = format("%s/aviatrix_controller_initialize/aviatrix_controller_init.py",
-  var.terraform_module_path == "" ? path.module : var.terraform_module_path
+    var.terraform_module_path == "" ? path.module : var.terraform_module_path
   )
   argument = format("'%s' '%s' '%s' '%s' '%s' '%s' '%s' '%s' '%s' '%s' '%s'",
     var.avx_controller_public_ip, var.avx_controller_private_ip, var.avx_controller_admin_email,
