@@ -56,4 +56,5 @@ variable "aviatrix_customer_id" {
 variable "terraform_module_path" {
   type        = string
   description = "terraform module absolute path"
+  default     = ""
 }
