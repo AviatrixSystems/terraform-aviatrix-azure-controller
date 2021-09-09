@@ -838,6 +838,7 @@ if __name__ == "__main__":
     account_email = sys.argv[9]
     access_account_name = sys.argv[10]
     aviatrix_customer_id = sys.argv[11]
+    controller_version = sys.argv[12]
 
     event = {
         "hostname": hostname,
@@ -846,7 +847,7 @@ if __name__ == "__main__":
         "aviatrix_api_route": "api",
         "admin_email": admin_email,
         "new_admin_password": new_admin_password,
-        "controller_init_version": "latest",
+        "controller_init_version": controller_version,
         "arm_subscription_id": arm_subscription_id,
         "arm_application_client_id": arm_application_client_id,
         "arm_application_client_secret": arm_application_client_secret,
@@ -861,6 +862,4 @@ if __name__ == "__main__":
     except Exception as e:
         logging.exception("")
     else:
-        logging.info(
-            "Aviatrix Controller %s has been initialized successfully", ucc_public_ip
-        )
+        logging.info("Aviatrix Controller has been initialized successfully")
