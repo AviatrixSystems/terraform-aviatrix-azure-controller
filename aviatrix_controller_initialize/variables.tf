@@ -45,7 +45,7 @@ variable "account_email" {
 
 variable "access_account_name" {
   type        = string
-  description = "aviatirx controller access account name"
+  description = "aviatrix controller access account name"
 }
 
 variable "aviatrix_customer_id" {
@@ -57,4 +57,10 @@ variable "terraform_module_path" {
   type        = string
   description = "terraform module absolute path"
   default     = ""
+}
+
+variable "controller_version" {
+  type        = string
+  description = "Aviatrix Controller version"
+  default     = "latest"
 }

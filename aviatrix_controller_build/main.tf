@@ -8,7 +8,7 @@ resource "azurerm_resource_group" "aviatrix_controller_rg" {
 //  Create the Virtual Network
 resource "azurerm_virtual_network" "aviatrix_controller_vnet" {
   address_space = [
-  "10.0.0.0/24"]
+  var.controller_vnet_cidr]
   location            = var.location
   name                = "${var.controller_name}-vnet"
   resource_group_name = azurerm_resource_group.aviatrix_controller_rg.name
@@ -20,7 +20,7 @@ resource "azurerm_subnet" "aviatrix_controller_subnet" {
   resource_group_name  = azurerm_resource_group.aviatrix_controller_rg.name
   virtual_network_name = azurerm_virtual_network.aviatrix_controller_vnet.name
   address_prefixes = [
-  "10.0.0.0/24"]
+  var.controller_subnet_cidr]
 }
 
 // 3. Create Public IP Address
@@ -66,15 +66,15 @@ resource "azurerm_network_interface" "aviatrix_controller_nic" {
 
 # 6. Create the virtual machine
 resource "azurerm_linux_virtual_machine" "aviatrix_controller_vm" {
-  admin_username                  = "aviatrix"
-  admin_password                  = "aviatrix1234!"
+  admin_username                  = var.controller_virtual_machine_admin_username
+  admin_password                  = var.controller_virtual_machine_admin_password
   name                            = "${var.controller_name}vm"
   disable_password_authentication = false
   location                        = azurerm_resource_group.aviatrix_controller_rg.location
   network_interface_ids = [
   azurerm_network_interface.aviatrix_controller_nic.id]
   resource_group_name = azurerm_resource_group.aviatrix_controller_rg.name
-  size                = "Standard_A4_v2"
+  size                = var.controller_virtual_machine_size
   //disk
   os_disk {
     name                 = "aviatrix-os-disk"
