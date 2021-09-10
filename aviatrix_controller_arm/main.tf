@@ -25,7 +25,6 @@ resource "azuread_service_principal" "aviatrix_sp" {
 # 4. Create the password for the created SP
 resource "azuread_service_principal_password" "aviatrix_sp_password" {
   service_principal_id = azuread_service_principal.aviatrix_sp.id
-  end_date             = "2120-12-30T23:00:00Z"
 }
 
 # 5. Create a role assignment for the created SP
