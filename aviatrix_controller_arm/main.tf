@@ -1,3 +1,12 @@
+/**
+ * # Aviatrix Controller ARM
+ *
+ * This module builds the Azure Active Directory (AAD) Application and Service Principal.
+ * If you already have an AAD Application you would like to use then you do not need to
+ * use this module.
+ */
+
+
 // accept license of Aviatrix Controller
 resource "null_resource" "accept_license" {
   provisioner "local-exec" {

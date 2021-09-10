@@ -1,3 +1,10 @@
+/**
+ * # Aviatrix Controller Build
+ *
+ * This module builds and launches the Aviatrix Controller VM instance.
+ */
+
+
 # 1. Create an Azure resource group
 resource "azurerm_resource_group" "aviatrix_controller_rg" {
   location = var.location
