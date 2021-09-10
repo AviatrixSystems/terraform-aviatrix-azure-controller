@@ -1,3 +1,10 @@
+/**
+ * # Aviatrix Controller Initialize
+ *
+ * This module executes the initialization script on the Aviatrix Controller.
+ */
+
+
 locals {
   option = format("%s/aviatrix_controller_init.py",
     var.terraform_module_path == "" ? path.module : format("%s/%s", var.terraform_module_path, "aviatrix_controller_initialize")
