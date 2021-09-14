@@ -4,6 +4,13 @@
  * This module executes the initialization script on the Aviatrix Controller.
  */
 
+terraform {
+  required_providers {
+    null = {
+      source = "hashicorp/null"
+    }
+  }
+}
 
 locals {
   option = format("%s/aviatrix_controller_init.py",

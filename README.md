@@ -10,6 +10,17 @@ These Terraform modules launch an Aviatrix Controller in Azure and create an acc
 2. [Python3](https://www.python.org/downloads/) - execute `accept_license.py` and `aviatrix_controller_init.py` python
    scripts
 
+## Providers
+
+The module `aviatrix_controller_arm` does not currently support `azuread` version 2.0 and above. You can use the [pessimistic constraint operator](https://www.terraform.io/docs/language/expressions/version-constraints.html#gt--1) in your `required_providers` configuration to use the latest version 1.x release of `azuread`.
+
+| Name | Version |
+|------|---------|
+| <a name="provider_azuread"></a> [azuread](#provider\_azuread) | ~> 1.0 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | \>= 2.0 |
+| <a name="provider_null"></a> [null](#provider\_null) | \>= 2.0 |
+
+
 ## Available Modules
 
 Module  | Description |
