@@ -4,6 +4,15 @@
  * This module builds and launches the Aviatrix Controller VM instance.
  */
 
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = ">= 2.0"
+    }
+  }
+}
+
 
 # 1. Create an Azure resource group
 resource "azurerm_resource_group" "aviatrix_controller_rg" {

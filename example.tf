@@ -1,11 +1,25 @@
 provider "azurerm" {
-  version = "~> 2.2"
   features {}
 }
 
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = ">= 2.0"
+    }
+    azuread = {
+      source  = "hashicorp/azuread"
+      version = "~> 1.0"
+    }
+    null = {
+      source = "hashicorp/null"
+    }
+  }
+}
+
 module "aviatrix_controller_arm" {
-  source                = "./aviatrix_controller_arm"
-  terraform_module_path = "<< absolute path of this terraform module >>"
+  source = "./aviatrix_controller_arm"
 }
 
 module "aviatrix_controller_build" {
@@ -29,25 +43,8 @@ module "aviatrix_controller_initialize" {
   account_email                 = "<< your email address for your access account >>"
   access_account_name           = "<< your account name mapping to your Azure account >>"
   aviatrix_customer_id          = "<< your customer license id >>"
-  terraform_module_path         = "<< absolute path of this terraform module >>"
   depends_on = [
   module.aviatrix_controller_arm]
-}
-
-output "subscription_id" {
-  value = module.aviatrix_controller_arm.subscription_id
-}
-
-output "directory_tenant_id" {
-  value = module.aviatrix_controller_arm.directory_id
-}
-
-output "application_id" {
-  value = module.aviatrix_controller_arm.application_id
-}
-
-output "application_key" {
-  value = module.aviatrix_controller_arm.application_key
 }
 
 output "avx_controller_public_ip" {

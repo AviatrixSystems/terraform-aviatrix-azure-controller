@@ -8,9 +8,9 @@ use this module.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azuread"></a> [azuread](#provider\_azuread) | n/a |
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | n/a |
-| <a name="provider_null"></a> [null](#provider\_null) | n/a |
+| <a name="provider_azuread"></a> [azuread](#provider\_azuread) | >= 1.0 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | >= 2.0 |
+| <a name="provider_null"></a> [null](#provider\_null) | >= 2.0 |
 
 ## Modules
 

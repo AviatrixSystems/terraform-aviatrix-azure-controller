@@ -6,6 +6,23 @@
  * use this module.
  */
 
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = ">= 2.0"
+    }
+    azuread = {
+      source  = "hashicorp/azuread"
+      version = ">= 1.0"
+    }
+    null = {
+      source  = "hashicorp/null"
+      version = ">= 2.0"
+    }
+  }
+}
+
 
 // accept license of Aviatrix Controller
 resource "null_resource" "accept_license" {
