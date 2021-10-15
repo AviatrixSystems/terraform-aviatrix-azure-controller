@@ -86,7 +86,7 @@ resource "azurerm_role_definition" "custom_role" {
       "Microsoft.Resources/marketplace/purchase/*",
       "Microsoft.Resources/subscriptions/resourceGroups/*"
     ]
-    notActions = []
+    not_actions = []
   }
 
   assignable_scopes = [
