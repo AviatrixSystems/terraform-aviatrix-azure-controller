@@ -97,6 +97,6 @@ resource "azurerm_role_definition" "custom_role" {
 resource "azurerm_role_assignment" "aviatrix_sp_role" {
   scope                = data.azurerm_subscription.main.id
   role_definition_name = var.create_custom_role ? null : "Contributor"
-  role_definition_id   = var.create_custom_role ? azurerm_role_definition.custom_role.id : null
+  role_definition_id   = var.create_custom_role ? azurerm_role_definition.custom_role[0].id : null
   principal_id         = azuread_service_principal.aviatrix_sp.id
 }
