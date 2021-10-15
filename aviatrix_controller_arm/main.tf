@@ -56,8 +56,47 @@ resource "azuread_service_principal_password" "aviatrix_sp_password" {
 # 5. Create a role assignment for the created SP
 data "azurerm_subscription" "main" {}
 
+# 6. Create a custom role if var.create_custom_role = true
+# The permissions in this role are based on https://docs.aviatrix.com/HowTos/azure_custom_role.html
+resource "azurerm_role_definition" "custom_role" {
+  count       = var.create_custom_role ? 1 : 0
+  name        = "Aviatrix Controller Custom Role"
+  scope       = data.azurerm_subscription.main.id
+  description = "Custom role for Aviatrix Controller. Created via Terraform"
+
+  permissions {
+    actions = [
+      "Microsoft.MarketplaceOrdering/offerTypes/publishers/offers/plans/agreements/*",
+      "Microsoft.Compute/*/read",
+      "Microsoft.Compute/availabilitySets/*",
+      "Microsoft.Compute/virtualMachines/*",
+      "Microsoft.Compute/disks/*",
+      "Microsoft.Network/*/read",
+      "Microsoft.Network/publicIPAddresses/*",
+      "Microsoft.Network/networkInterfaces/*",
+      "Microsoft.Network/networkSecurityGroups/*",
+      "Microsoft.Network/loadBalancers/*",
+      "Microsoft.Network/routeTables/*",
+      "Microsoft.Network/virtualNetworks/*",
+      "Microsoft.Storage/storageAccounts/*",
+      "Microsoft.Resources/*/read",
+      "Microsoft.Resourcehealth/healthevent/*",
+      "Microsoft.Resources/deployments/*",
+      "Microsoft.Resources/tags/*",
+      "Microsoft.Resources/marketplace/purchase/*",
+      "Microsoft.Resources/subscriptions/resourceGroups/*"
+    ]
+    notActions = []
+  }
+
+  assignable_scopes = [
+    data.azurerm_subscription.main.id,
+  ]
+}
+
 resource "azurerm_role_assignment" "aviatrix_sp_role" {
   scope                = data.azurerm_subscription.main.id
-  role_definition_name = "Contributor"
+  role_definition_name = var.create_custom_role ? null : "Contributor"
+  role_definition_id   = var.create_custom_role ? azurerm_role_definition.custom_role.id : null
   principal_id         = azuread_service_principal.aviatrix_sp.id
 }

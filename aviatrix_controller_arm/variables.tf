@@ -9,3 +9,9 @@ variable "terraform_module_path" {
   description = "terraform module absolute path"
   default     = ""
 }
+
+variable "create_custom_role" {
+  type        = bool
+  description = "Enable creation of custom role in stead of using contributor permissions"
+  default     = false
+}
