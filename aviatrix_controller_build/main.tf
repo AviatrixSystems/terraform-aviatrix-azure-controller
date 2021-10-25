@@ -60,7 +60,7 @@ resource "azurerm_network_security_group" "aviatrix_controller_nsg" {
     protocol                   = "TCP"
     source_port_range          = "*"
     destination_port_range     = "443"
-    source_address_prefixes    = [var.incoming_ssl_cidr]
+    source_address_prefixes    = var.incoming_ssl_cidr
     destination_address_prefix = "*"
     description                = "https-for-vm-management"
   }
