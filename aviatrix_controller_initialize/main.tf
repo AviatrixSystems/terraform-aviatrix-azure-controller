@@ -25,6 +25,6 @@ locals {
 }
 resource "null_resource" "run_script" {
   provisioner "local-exec" {
-    command = "Python3 -W ignore ${local.option} ${local.argument}"
+    command = "python3 -W ignore ${local.option} ${local.argument}"
   }
 }
