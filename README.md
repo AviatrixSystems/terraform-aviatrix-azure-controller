@@ -87,9 +87,12 @@ module "aviatrix_controller_arm" {
 module "aviatrix_controller_build" {
   source          = "git@github.com:AviatrixSystems/terraform-module-azure/aviatrix_controller_build.git"
   // please do not use special characters such as `\/"[]:|<>+=;,?*@&~!#$%^()_{}'` in the controller_name
-  controller_name = "<< your Aviatrix Controller name >>"
-  depends_on      = [
-    module.aviatrix_controller_arm]
+  controller_name   = "<< your Aviatrix Controller name >>"
+  // Example incoming_ssl_cidr list: ["1.1.1.1/32","10.10.0.0/16"]
+  incoming_ssl_cidr = ["<<trusted management cidrs>>,"]
+  depends_on        = [
+    module.aviatrix_controller_arm
+  ]
 }
 
 module "aviatrix_controller_initialize" {
@@ -106,7 +109,8 @@ module "aviatrix_controller_initialize" {
   access_account_name           = "<< your account name mapping to your Azure account >>"
   aviatrix_customer_id          = "<< your customer license id >>"
   depends_on                    = [
-    module.aviatrix_controller_arm]
+    module.aviatrix_controller_arm
+  ]
 }
 
 output "avx_controller_public_ip" {
