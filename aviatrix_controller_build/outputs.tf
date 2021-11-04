@@ -12,3 +12,7 @@ output "aviatrix_controller_public_ip_address" {
 output "aviatrix_controller_private_ip_address" {
   value = azurerm_network_interface.aviatrix_controller_nic.private_ip_address
 }
+
+output "aviatrix_controller_vnet" {
+  value = azurerm_virtual_network.aviatrix_controller_vnet
+}
