@@ -18,6 +18,6 @@ output "aviatrix_controller_vnet" {
   value = azurerm_virtual_network.aviatrix_controller_vnet
 }
 
-output "aviatrix_controller_rg_name" {
-  value = azurerm_resource_group.aviatrix_controller_rg.name
+output "aviatrix_controller_rg" {
+  value = azurerm_resource_group.aviatrix_controller_rg
 }

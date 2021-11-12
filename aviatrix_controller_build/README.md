@@ -44,3 +44,5 @@ No modules.
 |------|-------------|
 | <a name="output_aviatrix_controller_private_ip_address"></a> [aviatrix\_controller\_private\_ip\_address](#output\_aviatrix\_controller\_private\_ip\_address) | n/a |
 | <a name="output_aviatrix_controller_public_ip_address"></a> [aviatrix\_controller\_public\_ip\_address](#output\_aviatrix\_controller\_public\_ip\_address) | n/a |
+| <a name="output_aviatrix_controller_vnet"></a> [aviatrix\_controller\_vnet](#output\_aviatrix\_controller\_vnet) | n/a |
+| <a name="output_aviatrix_controller_rg"></a> [aviatrix\_controller\_rg](#output\_aviatrix\_controller\_rg) | n/a |
