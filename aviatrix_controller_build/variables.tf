@@ -38,3 +38,8 @@ variable "controller_virtual_machine_size" {
   description = "Virtual Machine size for the controller."
   default     = "Standard_A4_v2"
 }
+
+variable incoming_ssl_cidr {
+  type        = list(string)
+  description = "Incoming cidr for security group used by controller"
+}

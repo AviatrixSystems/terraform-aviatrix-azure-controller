@@ -36,6 +36,7 @@ No modules.
 | <a name="input_controller_virtual_machine_size"></a> [controller\_virtual\_machine\_size](#input\_controller\_virtual\_machine\_size) | Virtual Machine size for the controller. | `string` | `"Standard_A4_v2"` | no |
 | <a name="input_controller_vnet_cidr"></a> [controller\_vnet\_cidr](#input\_controller\_vnet\_cidr) | CIDR for controller VNET. | `string` | `"10.0.0.0/24"` | no |
 | <a name="input_location"></a> [location](#input\_location) | Resource Group Location for Aviatrix Controller | `string` | `"West US"` | no |
+| <a name="input_incoming_ssl_cidr"></a> [incoming_ssl_cidr](#input\_incoming\_ssl\_cidr) | List of incoming cidrs for network security group used by controller. | `list(string)` | n/a | yes |
 
 ## Outputs
 
@@ -43,3 +44,5 @@ No modules.
 |------|-------------|
 | <a name="output_aviatrix_controller_private_ip_address"></a> [aviatrix\_controller\_private\_ip\_address](#output\_aviatrix\_controller\_private\_ip\_address) | n/a |
 | <a name="output_aviatrix_controller_public_ip_address"></a> [aviatrix\_controller\_public\_ip\_address](#output\_aviatrix\_controller\_public\_ip\_address) | n/a |
+| <a name="output_aviatrix_controller_vnet"></a> [aviatrix\_controller\_vnet](#output\_aviatrix\_controller\_vnet) | n/a |
+| <a name="output_aviatrix_controller_rg"></a> [aviatrix\_controller\_rg](#output\_aviatrix\_controller\_rg) | n/a |
