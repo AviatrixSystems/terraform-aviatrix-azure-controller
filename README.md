@@ -25,9 +25,9 @@ The module `aviatrix_controller_arm` does not currently support `azuread` versio
 
 Module  | Description |
 | ------- | ----------- |
-|[aviatrix_controller_arm](./aviatrix_controller_arm) |Creates Azure Active Directory Application and Service Principal for Aviatrix access account setup |
-|[aviatrix_controller_build](./aviatrix_controller_build) |Builds the Aviatrix Controller VM on Azure |
-|[aviatrix_controller_initialize](./aviatrix_controller_initialize) | Initializes the Aviatrix Controller (setting admin email, setting admin password, upgrading controller version, and setting up access account) |
+|[aviatrix_controller_arm](modules/aviatrix_controller_arm) |Creates Azure Active Directory Application and Service Principal for Aviatrix access account setup |
+|[aviatrix_controller_build](modules/aviatrix_controller_build) |Builds the Aviatrix Controller VM on Azure |
+|[aviatrix_controller_initialize](modules/aviatrix_controller_initialize) | Initializes the Aviatrix Controller (setting admin email, setting admin password, upgrading controller version, and setting up access account) |
 
 ## Procedures for Building and Initializing a Controller in Azure
 
@@ -60,15 +60,9 @@ to authenticate to Azure.
 
 ### 3. Applying Terraform configuration
 
-The controller build and initialization can be done using a single terraform file.
+Build and initialize the Aviatrix Controller
 
 ```hcl
-provider "azurerm" {
-  features {}
-}
-
-provider "azuread" {}
-
 terraform {
   required_providers {
     azurerm = {
@@ -80,41 +74,16 @@ terraform {
   }
 }
 
-module "aviatrix_controller_arm" {
-  source = "git@github.com:AviatrixSystems/terraform-module-azure/aviatrix_controller_arm.git"
-}
-
-module "aviatrix_controller_build" {
-  source          = "git@github.com:AviatrixSystems/terraform-module-azure/aviatrix_controller_build.git"
-  // please do not use special characters such as `\/"[]:|<>+=;,?*@&~!#$%^()_{}'` in the controller_name
-  controller_name   = "<< your Aviatrix Controller name >>"
-  // Example incoming_ssl_cidr list: ["1.1.1.1/32","10.10.0.0/16"]
-  incoming_ssl_cidr = ["<<trusted management cidrs>>,"]
-  depends_on        = [
-    module.aviatrix_controller_arm
-  ]
-}
-
-module "aviatrix_controller_initialize" {
-  source                        = "git@github.com:AviatrixSystems/terraform-module-azure/aviatrix_controller_initialize.git"
-  avx_controller_public_ip      = module.aviatrix_controller_build.aviatrix_controller_public_ip_address
-  avx_controller_private_ip     = module.aviatrix_controller_build.aviatrix_controller_private_ip_address
-  avx_controller_admin_email    = "<< your admin email address for the Aviatrix Controller >>"
-  avx_controller_admin_password = "<< your admin password for the Aviatrix Controller >>"
-  arm_subscription_id           = module.aviatrix_controller_arm.subscription_id
-  arm_application_id            = module.aviatrix_controller_arm.application_id
-  arm_application_key           = module.aviatrix_controller_arm.application_key
-  directory_id                  = module.aviatrix_controller_arm.directory_id
-  account_email                 = "<< your email address for your access account >>"
-  access_account_name           = "<< your account name mapping to your Azure account >>"
-  aviatrix_customer_id          = "<< your customer license id >>"
-  depends_on                    = [
-    module.aviatrix_controller_arm
-  ]
-}
-
-output "avx_controller_public_ip" {
-  value = module.aviatrix_controller_build.aviatrix_controller_public_ip_address
+module "aviatrix_controller_azure" {
+   source                        = "AviatrixSystems/controller_azure/aviatrix"
+   controller_name               = "<<< your Aviatrix Controller name >>>"
+   // Example incoming_ssl_cidr list: ["1.1.1.1/32","10.10.0.0/16"]
+   incoming_ssl_cidr             = ["<<trusted management cidrs>>"]
+   avx_controller_admin_email    = "<<< your admin email address for the Aviatrix Controller>>>"
+   avx_controller_admin_password = "<<< your admin password for the Aviatrix Controller>>>"
+   account_email                 = "<< your email address for your access account >>"
+   access_account_name           = "<< your account name mapping to your Azure account >>"
+   aviatrix_customer_id          = "<< your customer license id >>"
 }
 ```
 
