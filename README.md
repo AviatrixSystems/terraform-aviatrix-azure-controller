@@ -12,7 +12,7 @@ These Terraform modules launch an Aviatrix Controller in Azure and create an acc
 
 ## Providers
 
-The module `aviatrix_controller_arm` does not currently support `azuread` version 2.0 and above. You can use the [pessimistic constraint operator](https://www.terraform.io/docs/language/expressions/version-constraints.html#gt--1) in your `required_providers` configuration to use the latest version 1.x release of `azuread`.
+The module `aviatrix_controller_azure` does not currently support `azuread` version 2.0 and above. You can use the [pessimistic constraint operator](https://www.terraform.io/docs/language/expressions/version-constraints.html#gt--1) in your `required_providers` configuration to use the latest version 1.x release of `azuread`.
 
 | Name | Version |
 |------|---------|
@@ -25,7 +25,7 @@ The module `aviatrix_controller_arm` does not currently support `azuread` versio
 
 Module  | Description |
 | ------- | ----------- |
-|[aviatrix_controller_arm](modules/aviatrix_controller_azure) |Creates Azure Active Directory Application and Service Principal for Aviatrix access account setup |
+|[aviatrix_controller_azure](modules/aviatrix_controller_azure) |Creates Azure Active Directory Application and Service Principal for Aviatrix access account setup |
 |[aviatrix_controller_build](modules/aviatrix_controller_build) |Builds the Aviatrix Controller VM on Azure |
 |[aviatrix_controller_initialize](modules/aviatrix_controller_initialize) | Initializes the Aviatrix Controller (setting admin email, setting admin password, upgrading controller version, and setting up access account) |
 
