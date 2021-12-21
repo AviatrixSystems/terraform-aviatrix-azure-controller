@@ -14,8 +14,8 @@ terraform {
   }
 }
 
-module "aviatrix_controller_arm" {
-  source             = "./modules/aviatrix_controller_arm"
+module "aviatrix_controller_azure" {
+  source             = "./modules/aviatrix_controller_azure"
   app_name           = var.app_name
   create_custom_role = var.create_custom_role
 }
@@ -33,7 +33,7 @@ module "aviatrix_controller_build" {
   incoming_ssl_cidr                         = var.incoming_ssl_cidr
 
   depends_on = [
-    module.aviatrix_controller_arm
+    module.aviatrix_controller_azure
   ]
 }
 
@@ -43,16 +43,16 @@ module "aviatrix_controller_initialize" {
   avx_controller_private_ip     = module.aviatrix_controller_build.aviatrix_controller_private_ip_address
   avx_controller_admin_email    = var.avx_controller_admin_email
   avx_controller_admin_password = var.avx_controller_admin_password
-  arm_subscription_id           = module.aviatrix_controller_arm.subscription_id
-  arm_application_id            = module.aviatrix_controller_arm.application_id
-  arm_application_key           = module.aviatrix_controller_arm.application_key
-  directory_id                  = module.aviatrix_controller_arm.directory_id
+  arm_subscription_id           = module.aviatrix_controller_azure.subscription_id
+  arm_application_id            = module.aviatrix_controller_azure.application_id
+  arm_application_key           = module.aviatrix_controller_azure.application_key
+  directory_id                  = module.aviatrix_controller_azure.directory_id
   account_email                 = var.account_email
   access_account_name           = var.access_account_name
   aviatrix_customer_id          = var.aviatrix_customer_id
   controller_version            = var.controller_version
 
   depends_on = [
-    module.aviatrix_controller_arm
+    module.aviatrix_controller_azure
   ]
 }
