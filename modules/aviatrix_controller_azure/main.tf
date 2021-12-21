@@ -1,5 +1,5 @@
 /**
- * # Aviatrix Controller ARM
+ * # Aviatrix Controller Azure
  *
  * This module builds the Azure Active Directory (AAD) Application and Service Principal.
  * If you already have an AAD Application you would like to use then you do not need to
@@ -27,7 +27,7 @@ terraform {
 // accept license of Aviatrix Controller
 resource "null_resource" "accept_license" {
   provisioner "local-exec" {
-    command = "python3 ${var.terraform_module_path == "" ? path.module : format("%s/%s", var.terraform_module_path, "aviatrix_controller_arm")}/accept_license.py"
+    command = "python3 ${var.terraform_module_path == "" ? path.module : format("%s/%s", var.terraform_module_path, "aviatrix_controller_azure")}/accept_license.py"
   }
 }
 
