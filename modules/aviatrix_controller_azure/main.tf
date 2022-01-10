@@ -10,11 +10,11 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = ">= 2.0"
+      version = ">= 2.8.0"
     }
     azuread = {
       source  = "hashicorp/azuread"
-      version = ">= 1.0"
+      version = "~> 2.0"
     }
     null = {
       source  = "hashicorp/null"
@@ -32,9 +32,12 @@ resource "null_resource" "accept_license" {
 }
 
 
+data "azuread_client_config" "current" {}
+
 # 1.Create the Azure AD APP
 resource "azuread_application" "aviatrix_ad_app" {
   display_name = var.app_name
+  owners = [data.azuread_client_config.current.object_id]
 }
 
 # 2. Create the password for the created APP
@@ -46,6 +49,7 @@ resource "azuread_application_password" "aviatrix_app_password" {
 # 3. Create SP associated with the APP
 resource "azuread_service_principal" "aviatrix_sp" {
   application_id = azuread_application.aviatrix_ad_app.application_id
+  owners = [data.azuread_client_config.current.object_id]
 }
 
 # 4. Create the password for the created SP
