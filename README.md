@@ -12,11 +12,9 @@ These Terraform modules launch an Aviatrix Controller in Azure and create an acc
 
 ## Providers
 
-The module `aviatrix_controller_azure` does not currently support `azuread` version 2.0 and above. You can use the [pessimistic constraint operator](https://www.terraform.io/docs/language/expressions/version-constraints.html#gt--1) in your `required_providers` configuration to use the latest version 1.x release of `azuread`.
-
 | Name | Version |
 |------|---------|
-| <a name="provider_azuread"></a> [azuread](#provider\_azuread) | ~> 1.0 |
+| <a name="provider_azuread"></a> [azuread](#provider\_azuread) | ~> 2.0 |
 | <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | \>= 2.0 |
 | <a name="provider_null"></a> [null](#provider\_null) | \>= 2.0 |
 

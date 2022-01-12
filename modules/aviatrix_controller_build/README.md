@@ -6,7 +6,7 @@ This module builds and launches the Aviatrix Controller VM instance.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | >= 2.0 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | >= 2.8.0 |
 
 ## Modules
 
