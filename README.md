@@ -73,7 +73,7 @@ terraform {
 }
 
 module "aviatrix_controller_azure" {
-   source                        = "AviatrixSystems/azure_controller/aviatrix"
+   source                        = "AviatrixSystems/azure-controller/aviatrix"
    controller_name               = "<<< your Aviatrix Controller name >>>"
    // Example incoming_ssl_cidr list: ["1.1.1.1/32","10.10.0.0/16"]
    incoming_ssl_cidr             = ["<<trusted management cidrs>>"]
