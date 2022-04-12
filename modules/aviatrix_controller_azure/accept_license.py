@@ -15,6 +15,7 @@ def accept_license():
             "aviatrix-systems:aviatrix-bundle-payg:aviatrix-enterprise-bundle-byol:latest",
         ],
         stdout=subprocess.PIPE,
+        shell=True,
     )
 
 
@@ -31,6 +32,7 @@ def get_license_details():
             "aviatrix-systems:aviatrix-bundle-payg:aviatrix-enterprise-bundle-byol:latest",
         ],
         stdout=subprocess.PIPE,
+        shell=True,
     )
     out = process.communicate()[0]
     py_dict = json.loads(out)
