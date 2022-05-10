@@ -84,7 +84,7 @@ resource "azurerm_network_interface" "aviatrix_controller_nic" {
 resource "azurerm_linux_virtual_machine" "aviatrix_controller_vm" {
   admin_username                  = var.controller_virtual_machine_admin_username
   admin_password                  = var.controller_virtual_machine_admin_password
-  name                            = "${var.controller_name}vm"
+  name                            = "${var.controller_name}-vm"
   disable_password_authentication = false
   location                        = azurerm_resource_group.aviatrix_controller_rg.location
   network_interface_ids = [
