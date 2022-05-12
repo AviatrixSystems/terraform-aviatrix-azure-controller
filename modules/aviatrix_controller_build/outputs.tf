@@ -21,3 +21,11 @@ output "aviatrix_controller_vnet" {
 output "aviatrix_controller_rg" {
   value = azurerm_resource_group.aviatrix_controller_rg
 }
+
+output "aviatrix_controller_subnet" {
+  value = azurerm_subnet.aviatrix_controller_subnet
+}
+
+output "aviatrix_controller_name" {
+  value = azurerm_linux_virtual_machine.aviatrix_controller_vm.name
+}
