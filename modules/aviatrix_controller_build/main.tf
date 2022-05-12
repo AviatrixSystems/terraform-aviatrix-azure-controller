@@ -57,7 +57,7 @@ resource "azurerm_network_security_group" "aviatrix_controller_nsg" {
     direction                  = "Inbound"
     name                       = "https"
     priority                   = "200"
-    protocol                   = "TCP"
+    protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "443"
     source_address_prefixes    = var.incoming_ssl_cidr
