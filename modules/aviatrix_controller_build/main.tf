@@ -80,7 +80,13 @@ resource "azurerm_network_interface" "aviatrix_controller_nic" {
   }
 }
 
-# 6. Create the virtual machine
+# 6. Associate the Security Group to the NIC
+resource "azurerm_network_interface_security_group_association" "aviatrix_controller_nic_sg" {
+  network_interface_id = azurerm_network_interface.aviatrix_controller_nic.id
+  network_security_group_id = azurerm_network_security_group.aviatrix_controller_nsg.id
+}
+
+# 7. Create the virtual machine
 resource "azurerm_linux_virtual_machine" "aviatrix_controller_vm" {
   admin_username                  = var.controller_virtual_machine_admin_username
   admin_password                  = var.controller_virtual_machine_admin_password
