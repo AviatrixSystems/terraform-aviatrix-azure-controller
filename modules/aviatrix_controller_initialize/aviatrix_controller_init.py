@@ -204,11 +204,11 @@ def wait_until_controller_api_server_is_ready(
     remaining_wait_time = total_wait_time
 
     """ Variable Description: (time_spent_for_requests_lib_timeout)
-    Description: 
-        * This value represents how many seconds for "requests" lib to timeout by default. 
-    Detail: 
-        * The value 20 seconds is actually a rough number  
-        * If there is a connection error and causing timeout when 
+    Description:
+        * This value represents how many seconds for "requests" lib to timeout by default.
+    Detail:
+        * The value 20 seconds is actually a rough number
+        * If there is a connection error and causing timeout when
           invoking--> requests.get(xxx), it takes about 20 seconds for requests.get(xxx) to throw timeout exception.
         * When calculating the remaining wait time, this value is considered.
     """
@@ -240,10 +240,12 @@ def wait_until_controller_api_server_is_ready(
 
                 response_message = py_dict["reason"]
                 response_msg_indicates_backend_not_ready = "Valid action required"
+                response_msg_request_refused = "RequestRefused"
                 # case1:
                 if (
                     py_dict["return"] is False
-                    and response_msg_indicates_backend_not_ready in response_message
+                    and (response_msg_indicates_backend_not_ready in response_message
+                    or response_msg_request_refused in response_message)
                 ):
                     is_api_service_ready = False
                     logging.info(
