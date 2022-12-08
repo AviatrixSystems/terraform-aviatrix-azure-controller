@@ -85,3 +85,33 @@ variable "location" {
   description = "Resource Group Location for Aviatrix Controller"
   default     = "West US"
 }
+
+variable "use_existing_vnet" {
+  type        = bool
+  description = "Flag to indicate whether to use an existing VNET"
+  default     = false
+}
+
+variable "resource_group_name" {
+  type        = string
+  description = "Resource group name, only required when use_existing_vnet is true"
+  default     = ""
+}
+
+variable "vnet_name" {
+  type        = string
+  description = "VNET name, only required when use_existing_vnet is true"
+  default     = ""
+}
+
+variable "subnet_name" {
+  type        = string
+  description = "subnet name, only required when use_existing_vnet is true"
+  default     = ""
+}
+
+variable "subnet_id" {
+  type        = string
+  description = "Subnet ID, only required when use_existing_vnet is true"
+  default     = ""
+}
