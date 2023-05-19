@@ -31,6 +31,11 @@ module "aviatrix_controller_build" {
   controller_virtual_machine_admin_password = var.controller_virtual_machine_admin_password
   controller_virtual_machine_size           = var.controller_virtual_machine_size
   incoming_ssl_cidr                         = var.incoming_ssl_cidr
+  use_existing_vnet                         = var.use_existing_vnet
+  resource_group_name                       = var.resource_group_name
+  vnet_name                                 = var.vnet_name
+  subnet_name                               = var.subnet_name
+  subnet_id                                 = var.subnet_id
 
   depends_on = [
     module.aviatrix_controller_azure

@@ -38,6 +38,11 @@ No modules.
 | <a name="input_controller_vnet_cidr"></a> [controller\_vnet\_cidr](#input\_controller\_vnet\_cidr) | CIDR for controller VNET. | `string` | `"10.0.0.0/24"` | no |
 | <a name="input_incoming_ssl_cidr"></a> [incoming\_ssl\_cidr](#input\_incoming\_ssl\_cidr) | Incoming cidr for security group used by controller | `list(string)` | n/a | yes |
 | <a name="input_location"></a> [location](#input\_location) | Resource Group Location for Aviatrix Controller | `string` | `"West US"` | no |
+| <a name="input_use_existing_vnet"></a> [use\_existing\_vnet](#input\_use\_existing\_vnet) | Flag to indicate whether to use an existing VNET. | `bool` | `false` | no |
+| <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | Resource group name, only required when use_existing_vnet is true. | `string` | `""` | no |
+| <a name="input_vnet_name"></a> [vnet\_name](#input\_vnet\_name) | VNET name, only required when use_existing_vnet is true. | `string` | `""` | no |
+| <a name="input_subnet_name"></a> [subnet\_name](#input\_subnet\_name) | Subnet name, only required when use_existing_vnet is true. | `string` | `""` | no |
+| <a name="input_subnet_id"></a> [subnet\_id](#input\_subnet\_id) | Subnet ID, only required when use_existing_vnet is true. | `string` | `""` | no |
 
 ## Outputs
 
@@ -47,3 +52,5 @@ No modules.
 | <a name="output_aviatrix_controller_public_ip_address"></a> [aviatrix\_controller\_public\_ip\_address](#output\_aviatrix\_controller\_public\_ip\_address) | n/a |
 | <a name="output_aviatrix_controller_rg"></a> [aviatrix\_controller\_rg](#output\_aviatrix\_controller\_rg) | n/a |
 | <a name="output_aviatrix_controller_vnet"></a> [aviatrix\_controller\_vnet](#output\_aviatrix\_controller\_vnet) | n/a |
+| <a name="output_aviatrix_controller_subnet"></a> [aviatrix\_controller\_subnet](#output\_aviatrix\_controller\_subnet) | n/a |
+| <a name="output_aviatrix_controller_name"></a> [aviatrix\_controller\_name](#output\_aviatrix\_controller\_name) | n/a |
