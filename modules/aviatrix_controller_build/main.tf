@@ -105,15 +105,22 @@ resource "azurerm_linux_virtual_machine" "aviatrix_controller_vm" {
   }
 
   source_image_reference {
-    offer     = "aviatrix-bundle-payg"
-    publisher = "aviatrix-systems"
-    sku       = "aviatrix-enterprise-bundle-byol"
-    version   = "latest"
+    offer     = jsondecode(data.http.image_info.response_body)["BYOL"]["Azure ARM"]["offer"]
+    publisher = jsondecode(data.http.image_info.response_body)["BYOL"]["Azure ARM"]["publisher"]
+    sku       = jsondecode(data.http.image_info.response_body)["BYOL"]["Azure ARM"]["sku"]
+    version   = jsondecode(data.http.image_info.response_body)["BYOL"]["Azure ARM"]["version"]
   }
 
   plan {
-    name      = "aviatrix-enterprise-bundle-byol"
-    product   = "aviatrix-bundle-payg"
-    publisher = "aviatrix-systems"
+    name      = jsondecode(data.http.image_info.response_body)["BYOL"]["Azure ARM"]["sku"]
+    product   = jsondecode(data.http.image_info.response_body)["BYOL"]["Azure ARM"]["offer"]
+    publisher = jsondecode(data.http.image_info.response_body)["BYOL"]["Azure ARM"]["publisher"]
+  }
+}
+
+data "http" "image_info" {
+  url = "https://release.prod.sre.aviatrix.com/image-details/arm_controller_image_details.json"
+  request_headers = {
+    "Accept" = "application/json"
   }
 }
