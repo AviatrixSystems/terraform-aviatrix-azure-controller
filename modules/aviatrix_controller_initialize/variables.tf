@@ -15,6 +15,7 @@ variable "avx_controller_admin_email" {
 
 variable "avx_controller_admin_password" {
   type        = string
+  sensitive   = true
   description = "aviatrix controller admin password"
 }
 
