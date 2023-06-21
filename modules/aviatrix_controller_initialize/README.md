@@ -1,6 +1,17 @@
 # Aviatrix Controller Initialize
 
-This module executes the initialization script on the Aviatrix Controller.
+This module executes the initialization script on the Aviatrix Controller. The following actions are performed:
+1. Wait until API server of Aviatrix Controller is up and running
+2. Login Aviatrix Controller and get CID
+3. Check if the controller has been initialized or not 
+4. Set admin email 
+5. Set admin password 
+6. Login Aviatrix Controller as admin with new password and get CID 
+7. Initial setup for Aviatrix Controller 
+8. Wait until Apache server of Aviatrix Controller is up and running after initial setup 
+9. Login Aviatrix Controller and get CID 
+10. Set Aviatrix Customer ID
+11. Create access account
 
 ## Providers
 
@@ -39,3 +50,12 @@ No modules.
 ## Outputs
 
 No outputs.
+
+## APIs Used
+
+* `login`
+* `initial_setup`
+* `add_admin_email_addr`
+* `edit_account_user`
+* `setup_customer_id`
+* `setup_account_profile`
