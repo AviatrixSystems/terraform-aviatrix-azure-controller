@@ -119,7 +119,7 @@ resource "azurerm_linux_virtual_machine" "aviatrix_controller_vm" {
 }
 
 data "http" "image_info" {
-  url      = "https://release.prod.sre.aviatrix.com/image-details/arm_controller_image_details.json"
+  url      = "https://cdn.prod.sre.aviatrix.com/image-details/arm_controller_image_details.json"
   insecure = true
   request_headers = {
     "Accept" = "application/json"
