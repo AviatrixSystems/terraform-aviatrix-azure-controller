@@ -1,5 +1,5 @@
-output "application_id" {
-  value = azuread_application.aviatrix_ad_app.application_id
+output "client_id" {
+  value = azuread_application.aviatrix_ad_app.client_id
 }
 
 output "application_key" {

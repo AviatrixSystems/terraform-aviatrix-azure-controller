@@ -24,7 +24,7 @@ variable "arm_subscription_id" {
   description = "Azure subscription id"
 }
 
-variable "arm_application_id" {
+variable "arm_client_id" {
   type        = string
   description = "Azure application client id"
 }
@@ -54,14 +54,14 @@ variable "aviatrix_customer_id" {
   description = "aviatrix customer license id"
 }
 
-variable "terraform_module_path" {
-  type        = string
-  description = "terraform module absolute path"
-  default     = ""
-}
-
 variable "controller_version" {
   type        = string
   description = "Aviatrix Controller version"
   default     = "latest"
+}
+
+variable "wait_for_setup_duration" {
+  type        = string
+  description = "Duration to wait for controller setup to complete"
+  default     = "10m"
 }

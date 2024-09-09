@@ -35,13 +35,12 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_app_name"></a> [app\_name](#input\_app\_name) | Azure AD App Name for Aviatrix Controller Build Up | `string` | `"aviatrix_controller_app"` | no |
 | <a name="input_create_custom_role"></a> [create\_custom\_role](#input\_create\_custom\_role) | Enable creation of custom role in stead of using contributor permissions | `bool` | `false` | no |
-| <a name="input_terraform_module_path"></a> [terraform\_module\_path](#input\_terraform\_module\_path) | terraform module absolute path | `string` | `""` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_application_id"></a> [application\_id](#output\_application\_id) | n/a |
+| <a name="output_client_id"></a> [client\_id](#output\_client\_id) | n/a |
 | <a name="output_application_key"></a> [application\_key](#output\_application\_key) | n/a |
 | <a name="output_directory_id"></a> [directory\_id](#output\_directory\_id) | n/a |
 | <a name="output_subscription_id"></a> [subscription\_id](#output\_subscription\_id) | n/a |

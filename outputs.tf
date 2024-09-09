@@ -14,6 +14,10 @@ output "avx_controller_rg" {
   value = module.aviatrix_controller_build.aviatrix_controller_rg
 }
 
+output "avx_controller_nsg" {
+  value = module.aviatrix_controller_build.aviatrix_controller_nsg
+}
+
 output "avx_controller_subnet" {
   value = module.aviatrix_controller_build.aviatrix_controller_subnet
 }

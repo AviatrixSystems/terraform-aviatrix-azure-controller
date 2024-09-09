@@ -16,40 +16,44 @@ terraform {
       source  = "hashicorp/azuread"
       version = "~> 2.0"
     }
-    null = {
-      source  = "hashicorp/null"
-      version = ">= 2.0"
-    }
   }
 }
 
 
 // accept license of Aviatrix Controller
-resource "null_resource" "accept_license" {
-  provisioner "local-exec" {
-    command = "python3 ${var.terraform_module_path == "" ? path.module : format("%s/%s", var.terraform_module_path, "aviatrix_controller_azure")}/accept_license.py"
-  }
+resource "azurerm_marketplace_agreement" "aviatrix_mp_agreement" {
+  count     = var.use_existing_mp_agreement ? 0 : 1
+  publisher = jsondecode(data.http.image_info.response_body)["g3"]["amd64"]["Azure ARM"]["publisher"]
+  offer     = jsondecode(data.http.image_info.response_body)["g3"]["amd64"]["Azure ARM"]["offer"]
+  plan      = jsondecode(data.http.image_info.response_body)["g3"]["amd64"]["Azure ARM"]["sku"]
 }
 
+data "http" "image_info" {
+  url = "https://cdn.prod.sre.aviatrix.com/image-details/arm_controller_image_details.json"
+
+  request_headers = {
+    "Accept" = "application/json"
+  }
+}
 
 data "azuread_client_config" "current" {}
 
 # 1.Create the Azure AD APP
 resource "azuread_application" "aviatrix_ad_app" {
   display_name = var.app_name
-  owners = [data.azuread_client_config.current.object_id]
+  owners       = [data.azuread_client_config.current.object_id]
 }
 
 # 2. Create the password for the created APP
 resource "azuread_application_password" "aviatrix_app_password" {
-  application_object_id = azuread_application.aviatrix_ad_app.id
-  end_date              = "2120-12-30T23:00:00Z"
+  application_id = azuread_application.aviatrix_ad_app.id
+  end_date       = "2120-12-30T23:00:00Z"
 }
 
 # 3. Create SP associated with the APP
 resource "azuread_service_principal" "aviatrix_sp" {
-  application_id = azuread_application.aviatrix_ad_app.application_id
-  owners = [data.azuread_client_config.current.object_id]
+  client_id = azuread_application.aviatrix_ad_app.client_id
+  owners    = [data.azuread_client_config.current.object_id]
 }
 
 # 4. Create the password for the created SP

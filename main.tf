@@ -1,4 +1,5 @@
 terraform {
+  required_version = ">= 1.2"
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
@@ -8,16 +9,14 @@ terraform {
       source  = "hashicorp/azuread"
       version = "~> 2.0"
     }
-    null = {
-      source = "hashicorp/null"
-    }
   }
 }
 
 module "aviatrix_controller_azure" {
-  source             = "./modules/aviatrix_controller_azure"
-  app_name           = var.app_name
-  create_custom_role = var.create_custom_role
+  source                    = "./modules/aviatrix_controller_azure"
+  app_name                  = var.app_name
+  create_custom_role        = var.create_custom_role
+  use_existing_mp_agreement = var.use_existing_mp_agreement
 }
 
 module "aviatrix_controller_build" {
@@ -49,7 +48,7 @@ module "aviatrix_controller_initialize" {
   avx_controller_admin_email    = var.avx_controller_admin_email
   avx_controller_admin_password = var.avx_controller_admin_password
   arm_subscription_id           = module.aviatrix_controller_azure.subscription_id
-  arm_application_id            = module.aviatrix_controller_azure.application_id
+  arm_client_id                 = module.aviatrix_controller_azure.client_id
   arm_application_key           = module.aviatrix_controller_azure.application_key
   directory_id                  = module.aviatrix_controller_azure.directory_id
   account_email                 = var.account_email

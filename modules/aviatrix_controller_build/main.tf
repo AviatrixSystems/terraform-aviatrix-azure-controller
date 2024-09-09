@@ -53,18 +53,21 @@ resource "azurerm_network_security_group" "aviatrix_controller_nsg" {
   location            = var.location
   name                = "${var.controller_name}-security-group"
   resource_group_name = var.use_existing_vnet == false ? azurerm_resource_group.aviatrix_controller_rg[0].name : var.resource_group_name
-  security_rule {
-    access                     = "Allow"
-    direction                  = "Inbound"
-    name                       = "https"
-    priority                   = "200"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "443"
-    source_address_prefixes    = var.incoming_ssl_cidr
-    destination_address_prefix = "*"
-    description                = "https-for-vm-management"
-  }
+}
+
+resource "azurerm_network_security_rule" "aviatrix_controller_nsg_rule_https" {
+  access                      = "Allow"
+  direction                   = "Inbound"
+  name                        = "https"
+  priority                    = "200"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "443"
+  source_address_prefixes     = var.incoming_ssl_cidr
+  destination_address_prefix  = "*"
+  description                 = "https-for-vm-management"
+  resource_group_name         = var.use_existing_vnet == false ? azurerm_resource_group.aviatrix_controller_rg[0].name : var.resource_group_name
+  network_security_group_name = azurerm_network_security_group.aviatrix_controller_nsg.name
 }
 
 # 5. Create the Virtual Network Interface Card
@@ -83,7 +86,7 @@ resource "azurerm_network_interface" "aviatrix_controller_nic" {
 
 # 6. Associate the Security Group to the NIC
 resource "azurerm_network_interface_security_group_association" "aviatrix_controller_nic_sg" {
-  network_interface_id = azurerm_network_interface.aviatrix_controller_nic.id
+  network_interface_id      = azurerm_network_interface.aviatrix_controller_nic.id
   network_security_group_id = azurerm_network_security_group.aviatrix_controller_nsg.id
 }
 
@@ -105,16 +108,16 @@ resource "azurerm_linux_virtual_machine" "aviatrix_controller_vm" {
   }
 
   source_image_reference {
-    offer     = jsondecode(data.http.image_info.response_body)["BYOL"]["Azure ARM"]["offer"]
-    publisher = jsondecode(data.http.image_info.response_body)["BYOL"]["Azure ARM"]["publisher"]
-    sku       = jsondecode(data.http.image_info.response_body)["BYOL"]["Azure ARM"]["sku"]
-    version   = jsondecode(data.http.image_info.response_body)["BYOL"]["Azure ARM"]["version"]
+    offer     = jsondecode(data.http.image_info.response_body)["g3"]["amd64"]["Azure ARM"]["offer"]
+    publisher = jsondecode(data.http.image_info.response_body)["g3"]["amd64"]["Azure ARM"]["publisher"]
+    sku       = jsondecode(data.http.image_info.response_body)["g3"]["amd64"]["Azure ARM"]["sku"]
+    version   = jsondecode(data.http.image_info.response_body)["g3"]["amd64"]["Azure ARM"]["version"]
   }
 
   plan {
-    name      = jsondecode(data.http.image_info.response_body)["BYOL"]["Azure ARM"]["sku"]
-    product   = jsondecode(data.http.image_info.response_body)["BYOL"]["Azure ARM"]["offer"]
-    publisher = jsondecode(data.http.image_info.response_body)["BYOL"]["Azure ARM"]["publisher"]
+    name      = jsondecode(data.http.image_info.response_body)["g3"]["amd64"]["Azure ARM"]["sku"]
+    product   = jsondecode(data.http.image_info.response_body)["g3"]["amd64"]["Azure ARM"]["offer"]
+    publisher = jsondecode(data.http.image_info.response_body)["g3"]["amd64"]["Azure ARM"]["publisher"]
   }
 }
 

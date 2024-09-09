@@ -6,9 +6,7 @@ These Terraform modules launch an Aviatrix Controller in Azure and create an acc
 
 ## Prerequisites
 
-1. [Terraform v0.13+](https://www.terraform.io/downloads.html) - execute terraform files
-2. [Python3](https://www.python.org/downloads/) - execute `accept_license.py` and `aviatrix_controller_init.py` python
-   scripts
+[Terraform v1.2+](https://www.terraform.io/downloads.html) - execute terraform files
 
 ## Providers
 
@@ -29,34 +27,14 @@ Module  | Description |
 
 ## Procedures for Building and Initializing a Controller in Azure
 
-### 1. Create the Python virtual environment and install required dependencies
-
-Create the virtual environment.
-
-``` shell
- python3 -m venv venv
-```
-
-Activate the virtual environment.
-
-``` shell
- source venv/bin/activate
-```
-
-Install required dependencies.
-
-``` shell
- pip install -r requirements.txt
-```
-
-### 2. Authenticating to Azure
+### 1. Authenticating to Azure
 
 Please refer to the documentation for
 the [azurerm](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs)
 and [azuread](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs) Terraform providers to decide how
 to authenticate to Azure.
 
-### 3. Applying Terraform configuration
+### 2. Applying Terraform configuration
 
 Build and initialize the Aviatrix Controller
 

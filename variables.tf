@@ -115,3 +115,9 @@ variable "subnet_id" {
   description = "Subnet ID, only required when use_existing_vnet is true"
   default     = ""
 }
+
+variable "use_existing_mp_agreement" {
+  type        = bool
+  description = "Flag to indicate whether to use an existing marketplace agreement"
+  default     = false
+}

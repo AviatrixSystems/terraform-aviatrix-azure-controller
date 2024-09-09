@@ -16,7 +16,11 @@ data "azurerm_resource_group" "rg" {
 }
 
 output "aviatrix_controller_rg" {
-  value = data.azurerm_resource_group.rg
+  value = var.use_existing_vnet ? data.azurerm_resource_group.rg : azurerm_resource_group.aviatrix_controller_rg[0]
+}
+
+output "aviatrix_controller_nsg" {
+  value = azurerm_network_security_group.aviatrix_controller_nsg
 }
 
 data "azurerm_virtual_network" "vnet" {
