@@ -34,33 +34,31 @@ the [azurerm](https://registry.terraform.io/providers/hashicorp/azurerm/latest/d
 and [azuread](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs) Terraform providers to decide how
 to authenticate to Azure.
 
+In simple cases you should be able to do:
+
+```bash
+az login
+```
+
+and store your subscription id in an environment variable:
+
+```bash
+export ARM_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
+```
+
 ### 2. Applying Terraform configuration
 
-Build and initialize the Aviatrix Controller
+Create a `terraform.tfvars` file with your settings:
 
 ```hcl
-terraform {
-  required_providers {
-    azurerm = {
-      source = "hashicorp/azurerm"
-    }
-    azuread = {
-      source = "hashicorp/azuread"
-    }
-  }
-}
-
-module "aviatrix_controller_azure" {
-   source                        = "AviatrixSystems/azure-controller/aviatrix"
-   controller_name               = "<<< your Aviatrix Controller name >>>"
-   // Example incoming_ssl_cidr list: ["1.1.1.1/32","10.10.0.0/16"]
-   incoming_ssl_cidr             = ["<<trusted management cidrs>>"]
-   avx_controller_admin_email    = "<<< your admin email address for the Aviatrix Controller>>>"
-   avx_controller_admin_password = "<<< your admin password for the Aviatrix Controller>>>"
-   account_email                 = "<< your email address for your access account >>"
-   access_account_name           = "<< your account name mapping to your Azure account >>"
-   aviatrix_customer_id          = "<< your customer license id >>"
-}
+access_account_name = "azure"
+account_email = "youremail@domain.com"
+aviatrix_customer_id = "domain.com-abu-xxxx"
+avx_controller_admin_email = "youremail@domain.com"
+avx_controller_admin_password = "StrongPassword123"
+controller_name = "avxtest"
+controller_virtual_machine_size = "Standard_D4_v5"
+incoming_ssl_cidr = ["<your ip>/32"]
 ```
 
 *Execute*
