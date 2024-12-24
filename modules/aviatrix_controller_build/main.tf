@@ -105,16 +105,16 @@ resource "azurerm_linux_virtual_machine" "aviatrix_controller_vm" {
   }
 
   source_image_reference {
-    offer     = jsondecode(data.http.image_info.response_body)["BYOL"]["Azure ARM"]["offer"]
-    publisher = jsondecode(data.http.image_info.response_body)["BYOL"]["Azure ARM"]["publisher"]
-    sku       = jsondecode(data.http.image_info.response_body)["BYOL"]["Azure ARM"]["sku"]
-    version   = jsondecode(data.http.image_info.response_body)["BYOL"]["Azure ARM"]["version"]
+    offer     = jsondecode(data.http.image_info.response_body)["g3"]["amd64"]["Azure ARM"]["offer"]
+    publisher = jsondecode(data.http.image_info.response_body)["g3"]["amd64"]["Azure ARM"]["publisher"]
+    sku       = jsondecode(data.http.image_info.response_body)["g3"]["amd64"]["Azure ARM"]["sku"]
+    version   = jsondecode(data.http.image_info.response_body)["g3"]["amd64"]["Azure ARM"]["version"]
   }
 
   plan {
-    name      = jsondecode(data.http.image_info.response_body)["BYOL"]["Azure ARM"]["sku"]
-    product   = jsondecode(data.http.image_info.response_body)["BYOL"]["Azure ARM"]["offer"]
-    publisher = jsondecode(data.http.image_info.response_body)["BYOL"]["Azure ARM"]["publisher"]
+    name      = jsondecode(data.http.image_info.response_body)["g3"]["amd64"]["Azure ARM"]["sku"]
+    product   = jsondecode(data.http.image_info.response_body)["g3"]["amd64"]["Azure ARM"]["offer"]
+    publisher = jsondecode(data.http.image_info.response_body)["g3"]["amd64"]["Azure ARM"]["publisher"]
   }
 }
 
